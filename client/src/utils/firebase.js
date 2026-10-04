@@ -1,0 +1,20 @@
+import { initializeApp } from "firebase/app";
+import {getAuth, GoogleAuthProvider} from "firebase/auth"
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  authDomain: "authexamnotes-bac5c.firebaseapp.com",
+  projectId: "authexamnotes-bac5c",
+  storageBucket: "authexamnotes-bac5c.firebasestorage.app",
+  messagingSenderId: "99221487604",
+  appId: "1:99221487604:web:1cbc5b6cdd1079c034c3a1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app)
+
+const provider = new GoogleAuthProvider()
+
+export {auth,provider}
