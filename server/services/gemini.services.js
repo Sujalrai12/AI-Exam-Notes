@@ -29,6 +29,11 @@ export const generateGeminiResponse = async (prompt)=>{
 
     if(!response.ok){
         const err = await response.text();
+        if (response.status === 401 || response.status === 403) {
+            throw new Error(
+                "Gemini authentication failed. Set GEMINI_API_KEY in server/.env to a Gemini API key from Google AI Studio. A Firebase web API key (VITE_FIREBASE_APIKEY) or OAuth access token will not work."
+            );
+        }
         throw new Error(err);
     }
     const data = await response.json()
@@ -49,6 +54,12 @@ export const generateGeminiResponse = async (prompt)=>{
         
     } catch (error) {
         console.log("Gemini Fetch error",error.message)
+        if (
+            error.message.startsWith("Gemini authentication failed.") ||
+            error.message === "GEMINI_API_KEY is not configured"
+        ) {
+            throw error;
+        }
         throw new Error("Gemini API fetch failed")
         
     }

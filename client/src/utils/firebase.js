@@ -1,8 +1,14 @@
 import { initializeApp } from "firebase/app";
 import {getAuth, GoogleAuthProvider} from "firebase/auth"
 
+const apiKey = import.meta.env.VITE_FIREBASE_APIKEY?.trim();
+
+if (!apiKey) {
+  throw new Error("Missing VITE_FIREBASE_APIKEY. Set it in client/.env and restart Vite.");
+}
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  apiKey,
   authDomain: "authexamnotes-bac5c.firebaseapp.com",
   projectId: "authexamnotes-bac5c",
   storageBucket: "authexamnotes-bac5c.firebasestorage.app",
