@@ -133,7 +133,7 @@ return (
     ${isSelected
       ? "border-black"
       : popular
-      ? "border-indigo-500"
+      ? "border-slate-500"
       : "border-gray-200"
     }`}
   >
@@ -161,7 +161,7 @@ return (
         ? "bg-gray-300 cursor-not-allowed"
         : isSelected
         ? "bg-black text-white"
-        : "bg-indigo-600 text-white hover:bg-indigo-700"
+        : "bg-slate-800 text-white hover:bg-slate-700"
       }`}>
         {isPayingThisCard ? "Redirecting..." :"Buy Now"}
 

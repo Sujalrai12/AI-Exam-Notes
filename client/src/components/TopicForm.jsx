@@ -96,7 +96,7 @@ export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className='rounded-2xl bg-gradient-to-br from-black/90 via-black/80 to-black/90
+            className='rounded-2xl bg-slate-800 from-black/90 via-black/80 to-black/90
     backdrop-blur-2xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.75)] 
     p-8 space-y-6 text-white' >
 

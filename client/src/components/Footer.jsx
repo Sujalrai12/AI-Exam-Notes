@@ -26,7 +26,7 @@ export const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className='z-10 mx-6 mb-6 mt-24 rounded-2xl bg-gradient-to-br from-black/90 via-black/80 to-black/90
+            className='z-10 mx-6 mb-6 mt-24 rounded-2xl bg-slate-800 from-black/90 via-black/80 to-black/90
     backdrop-blur02xl border border-white/10 px-8 py-6 shadow-[0_25px_60px_rgba(0,0,0,0.7)]'>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-8 items-start'>
                 <motion.div className='flex flex-col gap-4 transform-gpu'>

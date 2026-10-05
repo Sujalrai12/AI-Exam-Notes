@@ -24,7 +24,7 @@ const Home = () => {
           >
 
             <motion.h1 className='text-4xl lg:text-6xl font-extrabold leading-tight bg-clip-text text-transparent
-            bg-gradient-to-br from-black/90 via-black/60 to-black/90'
+            bg-slate-800 from-black/90 via-black/60 to-black/90'
               whileHover={{ y: -4 }}
               style={{
                 transform: "translateZ(40px)",
@@ -62,7 +62,7 @@ const Home = () => {
               whileTap={{ scale: 0.97 }}
              
 
-              className='mt-10- px-10 py-3 rounded-xl flex items-center gap-3 bg-gradient-to-br
+              className='mt-10- px-10 py-3 rounded-xl flex items-center gap-3 bg-slate-800
                       from-black/90 via-black/80 to-black/90 border border-white/10 text-white font-semibold text-lg 
                       shadow-[0_25px_60px_rgba(0,0,0,0.7)]'>
               
@@ -115,7 +115,7 @@ function Feature({ icon, title, des }) {
     <motion.div
       whileHover={{ y: -10,rotateX: 8,rotateY: -8,scale: 1.07 }}
       transition={{ type: "spring", stiffness: 200, damping: 18 }}
-      className='relative rounded-2xl p-6 bg-gradient-to-br from-black/90 via-black/80 to-black/90
+      className='relative rounded-2xl p-6 bg-slate-800 
     backdrop-blur-2xl
     border border-white/10
     shadow-[0_30px_80px_rgba(0,0,0,0.7) text-white'

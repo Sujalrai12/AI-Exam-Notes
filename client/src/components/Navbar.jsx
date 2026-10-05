@@ -30,8 +30,8 @@ export const Navbar = () => {
       initial={{ opacity: 0, y: -15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.5 }}
-      className='relative z-20 mx-6 mt-6 rounded-2xl bg-gradient-to-br from-black/90 via-black/80
-     to-black/90 backdrop-blur-2xl border border-white/10 shadow-[(0_22px_55px_rgba(0,0,0,0.75))]
+      className='relative z-20 mx-6 mt-6 rounded-2xl bg-slate-800
+     backdrop-blur-2xl border border-white/10 shadow-[(0_22px_55px_rgba(0,0,0,0.75))]
      flex items-center justify-between px-8 py-3 text-white'>
 
       <div className='flex items-center gap-3 '>
@@ -68,7 +68,7 @@ export const Navbar = () => {
                 animate={{ opacity: 1, y: 5, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className='absolute right-0 mt-4 w-64 rounded-2xl bg-black/90 backdrop-blur-xl
+                className='absolute right-0 mt-4 w-64 rounded-2xl bg-slate-800 backdrop-blur-xl
           border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.7)] p-4 text-white'>
                 <h4 className='font-semibold mb-2'>Buy Credits</h4>
                 <p className='text-sm text-gray-300 mb-4'>Use Credits to generate AI notes, diagrams & PDFs.</p>
@@ -100,7 +100,7 @@ export const Navbar = () => {
                 animate={{ opacity: 1, y: 5, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className='absolute right-[-50px] mt-4 w-52 rounded-2xl bg-black/90 backdrop-blur-xl
+                className='absolute right-[-50px] mt-4 w-52 rounded-2xl bg-slate-800 backdrop-blur-xl
           border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.7)] p-4 text-white'>
 
             <MenuItem text="History"  onClick={()=>{setShowProfile(false);navigate("/history")}}/>

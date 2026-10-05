@@ -63,7 +63,7 @@ export const History = () => {
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className='mb-10 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/10
+        className='mb-10 rounded-2xl bg-slate-800 backdrop-blur-xl border border-white/10
       px-8 py-6 items-start flex justify-between md:items-center gap-4 flex-col md:flex-row flex-wrap
       shadow-[0_20px_45px_rgba(0,0,0,0.6)]'>
 
@@ -108,7 +108,7 @@ export const History = () => {
               exit={{ x: -320 }}
               transition={{ type: "spring", stiffness: 260, damping: 30 }}
               className="fixed lg:static top-0 left-0 z-50 lg:z-auto w-72 lg:w-auto
-           h-full lg:w-auto h-full lg:h-[75vh] lg:rounded-3xl lg:col-span-1 bg-black/90 lg:bg-black/80 backdrop-blur-xl
+           h-full lg:w-auto h-full lg:h-[75vh] lg:rounded-3xl lg:col-span-1 bg-slate-800 lg:bg-slate-800 backdrop-blur-xl
            border border-white/10 shadow-[0_20px_45_rgba(0,0,0,0.6)] p-6 overflow-y-auto">
               <button className='lg:hidden text-white mb-4' onClick={() => setIsSidebarOpen(false)}>
                 ⬅️ back

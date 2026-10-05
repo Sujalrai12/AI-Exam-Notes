@@ -10,7 +10,11 @@ import { getCurrentUser } from '../services/api'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useLocation } from 'react-router-dom'
-export const serverUrl = "https://ai-exam-notes-server-3lzn.onrender.com"
+export const serverUrl = import.meta.env.VITE_SERVER_URL || (
+  import.meta.env.DEV
+    ? "http://localhost:8080"
+    : "https://ai-exam-notes-server-3lzn.onrender.com"
+)
 
 
 function NormalizeUnknownPath() {

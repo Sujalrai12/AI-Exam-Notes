@@ -22,16 +22,17 @@ app.post("/api/credits/webhook",
 app.use(express.json())
 app.use(cookieParser())
 
+const allowedOrigins = [
+    process.env.CLIENT_URL?.replace(/\/$/, ""),
+    "https://ai-exam-notes-client-y9mw.onrender.com",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+].filter(Boolean)
 
-
-app.use(cors(
-    {
-        origin:"https://ai-exam-notes-client-y9mw.onrender.com",
-        credentials:true,
-        methods:["GET","POST","PUT","DELETE","OPTIONS"]
-
-    }
-))
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
 
 
 

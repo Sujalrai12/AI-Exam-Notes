@@ -20,7 +20,7 @@ export const Notes = () => {
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className='mb-10 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/10
+        className='mb-10 rounded-2xl bg-slate-800 backdrop-blur-xl border border-white/10
         px-8 py-6 shadow-[0_20px_45px_rgba(0,0,0,0.6)] items-start flex 
         md:itmes-center justify-between gap-4 flex-col md:flex-row'>
         <div onClick={() => navigate("/")} className='cursor-pointer'>

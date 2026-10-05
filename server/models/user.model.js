@@ -10,6 +10,10 @@ const userschema = new mongoose.Schema({
         unique:true,
         required:true
     },
+    passwordHash:{
+        type:String,
+        select:false
+    },
     credits:{
         type:Number,
         default:50,
