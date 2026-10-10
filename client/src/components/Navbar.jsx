@@ -41,10 +41,10 @@ export const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-30 border-b border-rule bg-paper/95 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
-        <button type="button" onClick={() => navigate("/")} className="flex items-center gap-3">
-          <img src={logo} alt="ExamNotes" className="h-10 w-10 rounded-md object-cover ring-1 ring-rule" />
-          <span className="font-serif text-xl font-semibold tracking-tight text-ink">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-4 sm:px-8 sm:py-3">
+        <button type="button" onClick={() => navigate("/")} className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <img src={logo} alt="ExamNotes" className="h-8 w-8 rounded-md object-cover ring-1 ring-rule sm:h-10 sm:w-10" />
+          <span className="hidden font-serif text-xl font-semibold tracking-tight text-ink min-[360px]:inline">
             ExamNotes
           </span>
         </button>
@@ -70,23 +70,25 @@ export const Navbar = () => {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
+          <ThemeToggle className="!h-8 !px-2 sm:!h-9 sm:!px-3" />
           {userData ? (
             <>
               <button
                 type="button"
                 onClick={() => navigate("/pricing")}
-                className="hidden rounded-full border border-rule px-3 py-1.5 text-sm text-ink sm:block hover:cursor-pointer 
-                "
+                aria-label={`${credits} credits`}
+                title="View credits"
+                className="inline-flex min-h-8 items-center gap-1 whitespace-nowrap rounded-full border border-rule px-2 py-1 text-[11px] font-medium text-ink hover:cursor-pointer sm:min-h-9 sm:px-3 sm:py-1.5 sm:text-sm"
               >
-                {credits} credits
+                <span className="text-amber-500" aria-hidden="true">✦</span>
+                {credits}<span className="hidden sm:inline"> credits</span>
               </button>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setShowProfile((value) => !value)}
-                  className="grid h-9 w-9 place-items-center rounded-full bg-navy text-sm font-semibold text-paper hover:cursor-pointer "
+                className="grid h-8 w-8 place-items-center rounded-full bg-navy text-sm font-semibold text-paper hover:cursor-pointer sm:h-9 sm:w-9"
                 >
                   {(userData?.name || "U").slice(0, 1).toUpperCase()}
                 </button>
@@ -133,8 +135,8 @@ export const Navbar = () => {
             </button>
           )}
 
-          <button type="button" className="md:hidden" onClick={() => setOpen((value) => !value)} aria-label="Menu">
-            {open ? <HiOutlineX size={22} /> : <HiOutlineMenu size={22} />}
+          <button type="button" className="grid h-8 w-7 shrink-0 place-items-center md:hidden" onClick={() => setOpen((value) => !value)} aria-label="Menu">
+            {open ? <HiOutlineX size={20} /> : <HiOutlineMenu size={20} />}
           </button>
         </div>
       </div>
