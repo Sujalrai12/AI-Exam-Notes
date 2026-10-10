@@ -54,7 +54,11 @@ export const Footer = () => {
                 <button type="button" onClick={() => navigate("/login")}>Log in</button>
               </li>
             )}
-            <li className="text-muted">sujal@examnotes.app</li>
+            <li>
+              <a href="mailto:raisujal205@gmail.com" className="text-muted transition hover:text-ink">
+                raisujal205@gmail.com
+              </a>
+            </li>
           </ul>
         </div>
       </div>
