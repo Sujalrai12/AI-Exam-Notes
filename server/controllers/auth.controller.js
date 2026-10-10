@@ -24,9 +24,18 @@ const passwordMatches = async (password, passwordHash) => {
     return storedBuffer.length === derivedKey.length && timingSafeEqual(storedBuffer, derivedKey)
 }
 
+const isProductionCookie = process.env.NODE_ENV === "production"
+    || process.env.CLIENT_URL?.startsWith("https://")
+
+const sessionCookieOptions = {
+    httpOnly: true,
+    secure: isProductionCookie,
+    sameSite: isProductionCookie ? "none" : "lax"
+}
+
 const setSessionCookie = (res, userId) => {
     const token = getToken(userId)
-    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none", maxAge: 7 * 24 * 60 * 60 * 1000 })
+    res.cookie("token", token, { ...sessionCookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 })
 }
 
 export const register = async (req, res) => {
@@ -105,7 +114,7 @@ export const googleauth = async (req,res)=>{
 
 export const logOut = async (req,res) => {
     try{
-        await res.clearCookie("token")
+        res.clearCookie("token", sessionCookieOptions)
         return res.status(200).json({message:"LogOut Successfully"})
     }
     catch(error){

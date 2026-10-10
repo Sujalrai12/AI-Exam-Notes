@@ -52,6 +52,7 @@ html.dark-theme #root {
 }
 
 html.dark-theme .bg-white,
+html.dark-theme [class~="sm:bg-white"],
 html.dark-theme [class~="bg-[#f8faff]"],
 html.dark-theme [class~="bg-[#fbfcff]"],
 html.dark-theme [class~="bg-[#f5f8ff]"],

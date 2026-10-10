@@ -14,13 +14,13 @@ export const Notes = () => {
     <div className="min-h-screen bg-[#f5f8ff] text-ink">
       <Navbar />
 
-      <main className="mx-auto max-w-6xl px-5 pb-8 pt-7 sm:px-8 sm:pt-10">
-        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} aria-labelledby="generate-title" className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_34px_rgba(28,48,92,0.07)] sm:p-8 lg:p-9">
-          <div className="mb-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <main className="mx-auto max-w-6xl px-3 pb-8 pt-4 sm:px-8 sm:pt-10">
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} aria-labelledby="generate-title" className="rounded-xl border-0 bg-transparent p-0 shadow-none sm:rounded-2xl sm:border sm:border-slate-600/80 sm:bg-white sm:p-8 sm:shadow-[0_12px_34px_rgba(28,48,92,0.07)] lg:p-9">
+          <div className="mb-5 flex flex-col gap-4 sm:mb-7 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
             <div className="flex items-start gap-4">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-blue-50 text-2xl text-blue-600" aria-hidden="true">▤</span>
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-blue-50 text-xl text-blue-600 sm:h-14 sm:w-14 sm:rounded-2xl sm:text-2xl" aria-hidden="true">▤</span>
               <div>
-                <h1 id="generate-title" className="text-2xl font-bold tracking-tight text-[#111a32] sm:text-3xl">Generate study notes</h1>
+                <h1 id="generate-title" className="text-xl font-bold tracking-tight text-[#111a32] sm:text-3xl">Generate study notes</h1>
                 <p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted sm:text-base">Enter a topic and a few details to create structured, exam-ready notes.</p>
               </div>
             </div>
@@ -34,7 +34,7 @@ export const Notes = () => {
           {error && <p role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
         </motion.section>
 
-        <section aria-labelledby="generated-notes-title" className="mt-6 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_34px_rgba(28,48,92,0.055)] sm:p-8">
+        <section aria-labelledby="generated-notes-title" className="mt-6 rounded-xl border-0 bg-transparent p-0 shadow-none sm:rounded-2xl sm:border sm:border-slate-600 sm:bg-white sm:p-8 sm:shadow-[0_12px_34px_rgba(28,48,92,0.055)]">
           <div className="flex items-center gap-4">
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-xl text-blue-600" aria-hidden="true">▤</span>
             <div>
@@ -50,8 +50,8 @@ export const Notes = () => {
               <p className="mt-1 text-sm text-muted">This can take a few minutes. Keep this page open while we work.</p>
             </div>
           ) : result ? (
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-5 rounded-xl border border-slate-100 bg-white p-1 sm:p-3">
-              <FinalResult result={result} />
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-5 rounded-xl border-0 bg-transparent p-0 sm:border sm:border-slate-100 sm:bg-white sm:p-3">
+              <FinalResult result={result} compact />
             </motion.div>
           ) : (
             <div className="mt-5 flex min-h-40 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-[#fbfcff] px-5 py-9 text-center">

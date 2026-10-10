@@ -85,7 +85,7 @@ export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
   }, [loading])
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
       <div>
         <label htmlFor="notes-topic" className="mb-2 block text-sm font-semibold text-ink">Topic</label>
         <input
@@ -100,7 +100,7 @@ export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
         <div>
           <label htmlFor="notes-class" className="mb-2 block text-sm font-semibold text-ink">Class / level <span className="font-normal text-muted">(optional)</span></label>
           <input
@@ -127,7 +127,7 @@ export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
         </div>
       </div>
 
-      <div className="grid gap-4 border-y border-slate-100 py-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 border-y border-slate-100 py-4 sm:grid-cols-2 sm:py-5 lg:grid-cols-4">
         <Toggle label="Exam revision mode" description="Optimized for quick review" checked={revisionMode} onChange={setRevisionMode} />
         
         <Toggle label="Include diagrams" description="Add relevant diagrams" checked={includeDiagram} onChange={setIncludeDiagram} />

@@ -147,7 +147,7 @@ REVISION POINTS:
 
 QUICK QUIZ RULES:
 - If QUICK QUIZ MODE is ON:
-  - Generate exactly 5 multiple-choice questions based only on the notes.
+  - Generate exactly 10 multiple-choice questions based only on the notes.
   - Each question MUST have exactly 4 distinct options and exactly one correct answer.
   - Include a mix of recall, understanding, and application questions when suitable for the topic.
   - Make incorrect options plausible but clearly wrong.
