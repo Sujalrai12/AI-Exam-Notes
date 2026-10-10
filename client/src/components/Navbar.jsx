@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import axios from "axios"
-import { HiOutlineMenu, HiOutlineX } from "react-icons/hi"
+import { HiOutlineLogout, HiOutlineMenu, HiOutlineX } from "react-icons/hi"
 import { serverUrl } from "../App"
 import { setUserData } from "../redux/userSlice"
 import { ThemeToggle } from "./ThemeToggle"
@@ -91,19 +91,32 @@ export const Navbar = () => {
                   {(userData?.name || "U").slice(0, 1).toUpperCase()}
                 </button>
                 {showProfile && (
-                  <div className="absolute right-0 mt-2 w-44 rounded-xl border border-rule bg-paper p-2 shadow-lg">
+                  <div className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-xl border border-rule bg-paper p-2 shadow-lg">
+                    <div className="border-b border-rule px-3 py-2.5">
+                      <p className="truncate text-sm font-semibold text-ink">{userData?.name || "Your account"}</p>
+                      <p className="truncate text-xs text-muted">{userData?.email}</p>
+                    </div>
                     <button
                       type="button"
-                      onClick={() => { setShowProfile(false); navigate("/history") }}
-                      className="w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-gray-400 hover:cursor-pointer "
+                      onClick={() => { setShowProfile(false); navigate("/settings/profile") }}
+                      className="mt-1 w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-ink transition hover:text-blue-500 hover:cursor-pointer"
                     >
-                      History
+                      Profile settings
                     </button>
                     <button
                       type="button"
-                      onClick={handleSignOut}
-                      className="w-full rounded-lg px-3 py-2 text-left text-sm text-red-700 hover:bg-gray-400 hover:cursor-pointer "
+                      onClick={() => { setShowProfile(false); navigate("/history") }}
+                      className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-ink transition hover:text-blue-500 hover:cursor-pointer"
                     >
+                      History
+                    </button>
+                    <div className="my-1 border-t border-rule" />
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-500 transition hover:cursor-pointer hover:text-red-700"
+                    >
+                      <HiOutlineLogout size={17} aria-hidden="true" />
                       Sign out
                     </button>
                   </div>

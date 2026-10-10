@@ -85,6 +85,7 @@ export const login = async (req, res) => {
 
         setSessionCookie(res, user._id)
         const userData = user.toObject()
+        userData.hasPassword = Boolean(userData.passwordHash)
         delete userData.passwordHash
         return res.status(200).json(userData)
     } catch (error) {
@@ -99,12 +100,15 @@ export const googleauth = async (req,res)=>{
             return res.status(400).json({ message: "A valid Google email is required" })
         }
         const normalizedEmail = normalizeEmail(email)
-        let user = await UserModel.findOne({email: normalizedEmail})
+        let user = await UserModel.findOne({email: normalizedEmail}).select("+passwordHash")
         if(!user){
             user = await UserModel.create({name: typeof name === "string" && name.trim() ? name.trim() : normalizedEmail, email: normalizedEmail})
         }
         setSessionCookie(res, user._id)
-        return res.status(200).json(user)
+        const userData = user.toObject()
+        userData.hasPassword = Boolean(userData.passwordHash)
+        delete userData.passwordHash
+        return res.status(200).json(userData)
     }
     catch(error){
         return res.status(500).json({message:`googleSignup Error ${error}`})

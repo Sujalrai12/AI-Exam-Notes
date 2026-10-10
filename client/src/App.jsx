@@ -5,6 +5,7 @@ import {History} from './pages/History'
 import {HistoryNote} from './pages/HistoryNote'
 import {Notes} from './pages/Notes'
 import {Pricing} from './pages/Pricing'
+import ProfileSettings from './pages/ProfileSettings'
 import {PaymentSuccess} from "./pages/PaymentSuccess"
 import {PaymentFailed} from "./pages/PaymentFailed"
 import { getCurrentUser } from '../services/api'
@@ -47,6 +48,7 @@ function App() {
       <Route path='/history/:noteId' element={userData ? <HistoryNote/> : <Navigate to="/login" replace/> }/>
       <Route path='/notes' element={userData ? <Notes/> : <Navigate to="/login" replace/> }/>
       <Route path='/pricing' element={userData ? <Pricing/> : <Navigate to="/login" replace/> }/>
+      <Route path='/settings/profile' element={userData ? <ProfileSettings/> : <Navigate to="/login" replace/> }/>
       <Route path="/payment-success" element={<PaymentSuccess/>}/>
       <Route path="/payment-failed" element={<PaymentFailed/>}/>
       <Route path="*" element={<NormalizeUnknownPath/>}/>
