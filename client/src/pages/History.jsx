@@ -101,7 +101,7 @@ export const History = () => {
                   <button
                     type="button"
                     onClick={() => navigate(`/history/${note._id}`)}
-                    className="min-w-0 flex-1 rounded-lg text-left focus:outline-none focus:ring-4 focus:ring-blue-100"
+                    className="min-w-0 flex-1 rounded-lg text-left "
                     aria-label={`Open notes for ${note.topic || "untitled topic"}`}
                   >
                     <span className="flex items-start justify-between gap-3">
