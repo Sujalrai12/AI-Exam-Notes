@@ -1,133 +1,141 @@
-import React from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { NavLink, useNavigate } from "react-router-dom"
+import axios from "axios"
+import { HiOutlineMenu, HiOutlineX } from "react-icons/hi"
+import { serverUrl } from "../App"
+import { setUserData } from "../redux/userSlice"
+import { ThemeToggle } from "./ThemeToggle"
 import logo from "../assets/logo.png"
-import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
-import { serverUrl } from '../App'
-import { setUserData } from '../redux/userSlice'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+
+const links = [
+  { to: "/", label: "Home" },
+  { to: "/notes", label: "Generate" },
+  { to: "/history", label: "History" },
+  { to: "/pricing", label: "Credits" },
+]
 
 export const Navbar = () => {
   const { userData } = useSelector((state) => state.user)
   const credits = userData?.credits || 0
-  const [showcredits, setShowCredits] = useState(false)
+  const [open, setOpen] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const handleSignOut = async ()=>{
+
+  const handleSignOut = async () => {
     try {
-      await axios.get(serverUrl+ "/api/auth/logout",{WithCredentials:true})
+      await axios.get(`${serverUrl}/api/auth/logout`, { withCredentials: true })
       dispatch(setUserData(null))
-      navigate("/auth")
-      
+      setShowProfile(false)
+      navigate("/")
     } catch (error) {
       console.log(error)
     }
   }
+
+  const goProtected = (path) => {
+    setOpen(false)
+    navigate(userData ? path : "/login")
+  }
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.5 }}
-      className='relative z-20 mx-6 mt-6 rounded-2xl bg-slate-800
-     backdrop-blur-2xl border border-white/10 shadow-[(0_22px_55px_rgba(0,0,0,0.75))]
-     flex items-center justify-between px-8 py-3 text-white'>
+    <header className="sticky top-0 z-30 border-b border-rule bg-paper/95 backdrop-blur-sm">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
+        <button type="button" onClick={() => navigate("/")} className="flex items-center gap-3">
+          <img src={logo} alt="ExamNotes" className="h-10 w-10 rounded-md object-cover ring-1 ring-rule" />
+          <span className="font-serif text-xl font-semibold tracking-tight text-ink">
+            ExamNotes
+          </span>
+        </button>
 
-      <div className='flex items-center gap-3 '>
-        <img className="w-9 h-9" src={logo} alt="examnotes" />
-        <span className='text-lg hidden md:block font-semibold text-white' >
-          ExamNotes <span className='text-gray-400'>AI</span>
-        </span>
+        <nav className="hidden items-center gap-7 text-sm font-medium text-muted md:flex">
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === "/"}
+              onClick={(event) => {
+                if (link.to !== "/" && !userData) {
+                  event.preventDefault()
+                  navigate("/login")
+                }
+              }}
+              className={({ isActive }) =>
+                `transition hover:text-ink ${isActive ? "text-ink underline decoration-highlight decoration-2 underline-offset-8" : ""}`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
 
-      </div>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          {userData ? (
+            <>
+              <button
+                type="button"
+                onClick={() => navigate("/pricing")}
+                className="hidden rounded-full border border-rule px-3 py-1.5 text-sm text-ink sm:block hover:cursor-pointer 
+                "
+              >
+                {credits} credits
+              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowProfile((value) => !value)}
+                  className="grid h-9 w-9 place-items-center rounded-full bg-navy text-sm font-semibold text-paper hover:cursor-pointer "
+                >
+                  {(userData?.name || "U").slice(0, 1).toUpperCase()}
+                </button>
+                {showProfile && (
+                  <div className="absolute right-0 mt-2 w-44 rounded-xl border border-rule bg-paper p-2 shadow-lg">
+                    <button
+                      type="button"
+                      onClick={() => { setShowProfile(false); navigate("/history") }}
+                      className="w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-gray-400 hover:cursor-pointer "
+                    >
+                      History
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="w-full rounded-lg px-3 py-2 text-left text-sm text-red-700 hover:bg-gray-400 hover:cursor-pointer "
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="rounded-full bg-navy px-4 py-2 text-sm font-semibold text-paper hover:cursor-pointer"
+            >
+              Log in
+            </button>
+          )}
 
-      <div className='flex items-center gap-6 relative'>
-        <div className='relative'>
-          <motion.div
-            onClick={() => {setShowCredits(!showcredits);setShowProfile(false)}}
-            whileHover={{ scale: 1.07 }}
-            whileTap={{ scale: 0.97 }}
-
-            className='flex items-center gap-1
-          px-4 py-2 rounded-full bg-white/10 text-white 
-          text-sm shadow-md cursor-pointer'>
-            <span>💎</span>
-            <span>{credits}</span>
-            <motion.span whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.97 }} className='ml-2 h-5 w-5 flex items-center justify-center 
-          rounded-full bg-white text-xs font-bold'>
-              ➕
-            </motion.span>
-
-          </motion.div>
-
-          <AnimatePresence>
-            {showcredits && <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 5, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className='absolute right-0 mt-4 w-64 rounded-2xl bg-slate-800 backdrop-blur-xl
-          border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.7)] p-4 text-white'>
-                <h4 className='font-semibold mb-2'>Buy Credits</h4>
-                <p className='text-sm text-gray-300 mb-4'>Use Credits to generate AI notes, diagrams & PDFs.</p>
-                <button onClick={() => {setShowCredits(false);navigate("/pricing")}} className='w-full py-2 rounded-lg bg-gradient-to-br from-white
-            to-gray-200 text-black font-semibold hover:opacity-90'>Buy More Credits</button>
-
-              </motion.div>
-            }</AnimatePresence>
-
+          <button type="button" className="md:hidden" onClick={() => setOpen((value) => !value)} aria-label="Menu">
+            {open ? <HiOutlineX size={22} /> : <HiOutlineMenu size={22} />}
+          </button>
         </div>
-
-        <div className='relative'>
-          <motion.div
-            onClick={() => {setShowProfile(!showProfile);setShowCredits(false)}}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.97 }}
-
-            className='flex items-center gap-1
-          px-4 py-2 rounded-full bg-white/10 text-white 
-          text-sm shadow-md cursor-pointer'>
-            <span className='text-lg'>{userData?.name.slice(0, 1).toUpperCase()}</span>
-
-
-          </motion.div>
-
-          <AnimatePresence>
-            {showProfile && <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 5, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className='absolute right-[-50px] mt-4 w-52 rounded-2xl bg-slate-800 backdrop-blur-xl
-          border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.7)] p-4 text-white'>
-
-            <MenuItem text="History"  onClick={()=>{setShowProfile(false);navigate("/history")}}/>
-            <div className='h-px  bg-white/10 mx-3'/>
-            <MenuItem text="sign out" red  onClick={handleSignOut}/>
-
-
-              </motion.div>
-            }</AnimatePresence>
-            
-            </div>
       </div>
-    </motion.div>
-  )
-}
 
-function MenuItem ({onClick, text, red}){
-  return (
-    <div onClick={onClick} className={`w-full text-left px-5 py-3 text-sm transition-colors rounded-lg
-    ${
-      red 
-      ? "text-red-400 hover:bg-red-500/10"
-      : "text-gray-200 hover:bg-white/10"
-    }`
-    }>
-      {text}
-
-    </div>
+      {open && (
+        <div className="border-t border-rule bg-paper px-5 py-4 md:hidden">
+          <div className="flex flex-col gap-3 text-sm font-medium">
+            <button type="button" className="text-left" onClick={() => { setOpen(false); navigate("/") }}>Home</button>
+            <button type="button" className="text-left" onClick={() => goProtected("/notes")}>Generate</button>
+            <button type="button" className="text-left" onClick={() => goProtected("/history")}>History</button>
+            <button type="button" className="text-left" onClick={() => goProtected("/pricing")}>Credits</button>
+          </div>
+        </div>
+      )}
+    </header>
   )
 }

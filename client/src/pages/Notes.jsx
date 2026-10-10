@@ -1,102 +1,69 @@
-import React from 'react'
-import { motion } from 'motion/react'
-import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { TopicForm } from '../components/TopicForm'
-import { useState } from 'react'
-import { Sidebar } from '../components/Sidebar'
-import { FinalResult } from '../components/FinalResult'
+import { motion } from "motion/react"
+import { useState } from "react"
+import { Navbar } from "../components/Navbar"
+import { TopicForm } from "../components/TopicForm"
+import { FinalResult } from "../components/FinalResult"
+import { Footer } from "../components/Footer"
 
 export const Notes = () => {
-  const navigate = useNavigate()
-  const { userData } = useSelector((state) => state.user)
-  const credits = userData?.credits || 0
-  const[loading, setLoading] = useState(false)
-  const[result, setResult] = useState(null)
-  const[error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState("")
+
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 px-6 py-6'>
-      <motion.header
-        initial={{ opacity: 0, y: -15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className='mb-10 rounded-2xl bg-slate-800 backdrop-blur-xl border border-white/10
-        px-8 py-6 shadow-[0_20px_45px_rgba(0,0,0,0.6)] items-start flex 
-        md:itmes-center justify-between gap-4 flex-col md:flex-row'>
-        <div onClick={() => navigate("/")} className='cursor-pointer'>
-          <h1 className='text-2xl font-bold bg-linear-to-r from-white via-grey-300 to-white bg-clip-text text-transparent'>
-            ExamNotes AI
-          </h1>
-          <p className='text-sm text-gray-300 mt-1'>AI-powered exam-oriented notes & revision</p>
-        </div>
+    <div className="min-h-screen bg-[#f5f8ff] text-ink">
+      <Navbar />
 
-
-        <div className='flex items-center gap-4 flex-wrap'>
-          <button onClick={()=>navigate("/pricing")} className='flex items-center gap-2
-        px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm'>
-
-            <span>💎</span>
-            <span>{credits}</span>
-            <motion.span whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.97 }} className='ml-2 h-5 w-5 flex items-center justify-center 
-                    rounded-full bg-white text-xs font-bold'>
-              ➕
-            </motion.span>
-            </button>
-
-          <button onClick={()=>navigate("/history")} className='px-4 py-3 rounded-full text-sm font-medium
-           bg-white/10 border border-white/20 text-white hover:bg-white/20 transition flex items-center gap-2'>
-            📚 Your Notes
-
-          </button>
-        </div>
-      </motion.header>
-
-       <motion.div className='mb-12'>
-        <TopicForm loading={loading} setResult={setResult} setLoading={setLoading} setError={setError}/>
-       </motion.div>
-
-       {loading && (<motion.div
-       animate={{opacity:[0.4,1,0.4]}}
-       transition={{repeat :Infinity, duration :1.2}}
-       className='text-center text-black font-medium mb-6'>
-        Generating exam-focused notes...
-        
-        </motion.div>)}
-
-
-
-       {!result && <motion.div whileHover={{scale :1.03}}
-       className='h-64 rounded-2xl flex flex-col items-center justify-center bg-white/60 
-       backdrop-blur-lg border border-dashed border-gray-300 text-gray-500 shadow-inner'>
-
-        <span className='text-4xl block mb-3 '>📘</span>
-        <p className='text-sm'>
-          Generated notes will appear here
-        </p>
-
-       </motion.div>}
-
-       <motion.div>
-
-        {result && <motion.div 
-        initial ={{opacity:0, y:30}}
-        animate={{opacity:1, y:0}}
-        transition={{duration:0.4}}
-        className='flex flex-col lg:grid lg:grid-cols-4 gap-6'>
-
-          <div className='lg:col-span-1'>
-            <Sidebar result={result}/>
+      <main className="mx-auto max-w-6xl px-5 pb-8 pt-7 sm:px-8 sm:pt-10">
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} aria-labelledby="generate-title" className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_34px_rgba(28,48,92,0.07)] sm:p-8 lg:p-9">
+          <div className="mb-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-blue-50 text-2xl text-blue-600" aria-hidden="true">▤</span>
+              <div>
+                <h1 id="generate-title" className="text-2xl font-bold tracking-tight text-[#111a32] sm:text-3xl">Generate study notes</h1>
+                <p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted sm:text-base">Enter a topic and a few details to create structured, exam-ready notes.</p>
+              </div>
+            </div>
+            {/* <div className="flex max-w-sm items-center gap-3 rounded-xl bg-blue-50/80 px-4 py-3 text-sm leading-5 text-gray-900">
+              <span className="text-xl text-blue-600" aria-hidden="true">✦</span>
+              <span>Make a focused set of notes, diagrams and revision points for your next study session.</span>
+            </div> */}
           </div>
 
-          <div className='lg:col-span-3 rounded-2xl bg-white shadow-[0_15px_40px_rgba(0,0,0,0.15)] p-6'>
-            <FinalResult result={result}/>
+          <TopicForm loading={loading} setResult={setResult} setLoading={setLoading} setError={setError} />
+          {error && <p role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
+        </motion.section>
+
+        <section aria-labelledby="generated-notes-title" className="mt-6 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_34px_rgba(28,48,92,0.055)] sm:p-8">
+          <div className="flex items-center gap-4">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-xl text-blue-600" aria-hidden="true">▤</span>
+            <div>
+              <h2 id="generated-notes-title" className="text-xl font-bold text-[#111a32]">Generated notes</h2>
+              <p className="mt-1 text-sm text-muted">{result ? "Your study notes are ready." : "Your AI-generated notes will appear here."}</p>
+            </div>
           </div>
-        
-        </motion.div>}
 
-       </motion.div>
+          {loading ? (
+            <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50/50 px-5 py-10 text-center" aria-live="polite">
+              <div className="mx-auto h-8 w-8 animate-spin rounded-full border-[3px] border-blue-200 border-t-blue-600" aria-hidden="true" />
+              <p className="mt-4 text-sm font-semibold text-ink">Preparing your notes</p>
+              <p className="mt-1 text-sm text-muted">This can take a few minutes. Keep this page open while we work.</p>
+            </div>
+          ) : result ? (
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-5 rounded-xl border border-slate-100 bg-white p-1 sm:p-3">
+              <FinalResult result={result} />
+            </motion.div>
+          ) : (
+            <div className="mt-5 flex min-h-40 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-[#fbfcff] px-5 py-9 text-center">
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-white text-2xl text-slate-400 shadow-sm" aria-hidden="true">▤</span>
+              <p className="mt-3 text-sm font-semibold text-slate-700">No notes generated yet</p>
+              <p className="mt-1 max-w-md text-sm leading-6 text-muted">Add a topic above and choose Generate notes to get started.</p>
+            </div>
+          )}
+        </section>
+      </main>
 
+      <div className="mx-auto max-w-6xl px-5 sm:px-8"><Footer /></div>
     </div>
   )
 }

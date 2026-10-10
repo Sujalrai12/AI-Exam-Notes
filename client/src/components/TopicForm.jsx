@@ -1,211 +1,169 @@
-import React, { useState } from 'react'
-import { motion } from 'motion/react'
-import { generateNotes } from '../../services/api';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateCredits } from '../redux/userSlice';
+import { useEffect, useState } from "react"
+import { motion } from "motion/react"
+import { generateNotes } from "../../services/api"
+import { useDispatch } from "react-redux"
+import { updateCredits } from "../redux/userSlice"
 
 export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
-    const [topic, setTopic] = useState("");
-    const [classLevel, setClassLevel] = useState("");
-    const [examType, setExamType] = useState("");
-    const [revisionMode, setRevisionMode] = useState(false);
-    const [includeDiagram, setIncludeDiagram] = useState(false);
-    const [includeChart, setIncludeChart] = useState(false);
-    const [progress, setProgress] = useState(0);
-    const [progressText, setProgressText] = useState("");
-    const dispatch = useDispatch()
+  const [topic, setTopic] = useState("")
+  const [classLevel, setClassLevel] = useState("")
+  const [examType, setExamType] = useState("")
+  const [revisionMode, setRevisionMode] = useState(false)
+  const [quickQuizMode, setQuickQuizMode] = useState(false)
+  const [includeDiagram, setIncludeDiagram] = useState(false)
+  const [includeChart, setIncludeChart] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [progressText, setProgressText] = useState("")
+  const dispatch = useDispatch()
 
-    const handlesubmit = async () => {
-        if (!topic.trim()) {
-            setError("Please enter the topic")
-            return
-        }
-        setError("")
-        setLoading(true)
-        setResult(null)
-        try {
-            const result = await generateNotes(
-                {
-                    topic,
-                    classLevel,
-                    examType,
-                    revisionMode,
-                    includeDiagram,
-                    includeChart,
-                }
-            )
-            setResult(result.data)
-            setLoading(false)
-            setClassLevel("")
-            setTopic("")
-            setExamType("")
-            setIncludeChart(false)
-            setRevisionMode(false)
-            setIncludeDiagram(false)
-
-            if(typeof result.creditsLeft === "number"){
-                dispatch(updateCredits(result.creditsLeft))
-
-            }
-
-        } catch (error) {
-            console.log(error)
-            setError("Failed to fetch notes from server")
-            setLoading(false)
-        }
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (!topic.trim()) {
+      setError("Please enter the topic you want to study.")
+      return
     }
 
-    useEffect(() => {
-        if (!loading) {
-            setProgress(0);
-            setProgressText("");
-            return;
-        }
-        let value = 0;
+    setError("")
+    setProgress(0)
+    setProgressText("")
+    setLoading(true)
+    setResult(null)
+    try {
+      const response = await generateNotes({
+        topic,
+        classLevel,
+        examType,
+        revisionMode,
+        quickQuizMode,
+        includeDiagram,
+        includeChart,
+      })
 
-        const interval = setInterval(() => {
-            value += Math.random() * 8
+      setResult({ ...response.data, noteId: response.noteId })
+      setClassLevel("")
+      setTopic("")
+      setExamType("")
+      setIncludeChart(false)
+      setRevisionMode(false)
+      setQuickQuizMode(false)
+      setIncludeDiagram(false)
 
-            if (value >= 95) {
-                value = 95;
-                setProgressText("Almost done...");
-                clearInterval(interval);
-            }
-            else if (value > 70) {
-                setProgressText("Finalizing notes...")
-            }
-            else if (value > 40) {
-                setProgressText("Processing content... ")
-            }
-            else {
-                setProgressText("Generating notes...")
-            }
+      if (typeof response.creditsLeft === "number") {
+        dispatch(updateCredits(response.creditsLeft))
+      }
+    } catch (error) {
+      console.error(error)
+      setError(error.response?.data?.message || error.message || "We couldn't generate notes. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
-            setProgress(Math.floor(value))
+  useEffect(() => {
+    if (!loading) {
+      return undefined
+    }
 
-        }, 700)
+    let value = 0
+    const interval = setInterval(() => {
+      value += Math.random() * 8
+      if (value >= 95) {
+        value = 95
+        setProgressText("Almost done...")
+        clearInterval(interval)
+      } else if (value > 70) {
+        setProgressText("Finalizing your notes...")
+      } else if (value > 40) {
+        setProgressText("Organizing the key ideas...")
+      } else {
+        setProgressText("Preparing your notes...")
+      }
+      setProgress(Math.floor(value))
+    }, 700)
 
-    }, [loading])
+    return () => clearInterval(interval)
+  }, [loading])
 
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <label htmlFor="notes-topic" className="mb-2 block text-sm font-semibold text-ink">Topic</label>
+        <input
+          id="notes-topic"
+          type="text"
+          autoComplete="off"
+          required
+          className="min-h-13 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          placeholder="e.g. Web Development, Photosynthesis, Binary Search"
+          onChange={(event) => setTopic(event.target.value)}
+          value={topic}
+        />
+      </div>
 
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="notes-class" className="mb-2 block text-sm font-semibold text-ink">Class / level <span className="font-normal text-muted">(optional)</span></label>
+          <input
+            id="notes-class"
+            type="text"
+            autoComplete="off"
+            className="min-h-13 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            placeholder="e.g. Class 10, Class 12, B.Tech 3rd year"
+            onChange={(event) => setClassLevel(event.target.value)}
+            value={classLevel}
+          />
+        </div>
+        <div>
+          <label htmlFor="notes-exam" className="mb-2 block text-sm font-semibold text-ink">Exam type <span className="font-normal text-muted">(optional)</span></label>
+          <input
+            id="notes-exam"
+            type="text"
+            autoComplete="off"
+            className="min-h-13 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            placeholder="e.g. CBSE, JEE, NEET, GATE, UPSC"
+            onChange={(event) => setExamType(event.target.value)}
+            value={examType}
+          />
+        </div>
+      </div>
 
-    return (
-        <motion.div
+      <div className="grid gap-4 border-y border-slate-100 py-5 sm:grid-cols-2 lg:grid-cols-4">
+        <Toggle label="Exam revision mode" description="Optimized for quick review" checked={revisionMode} onChange={setRevisionMode} />
+        
+        <Toggle label="Include diagrams" description="Add relevant diagrams" checked={includeDiagram} onChange={setIncludeDiagram} />
+        <Toggle label="Include charts" description="Add charts and tables" checked={includeChart} onChange={setIncludeChart} />
+      </div>
 
+      <motion.button
+        type="submit"
+        whileHover={!loading ? { y: -1 } : {}}
+        whileTap={!loading ? { scale: 0.995 } : {}}
+        disabled={loading || !topic.trim()}
+        className="flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(49,91,255,0.18)] transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+      >
+        <span aria-hidden="true">✦</span>{loading ? "Generating notes..." : "Generate notes"}<span aria-hidden="true">→</span>
+      </motion.button>
 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className='rounded-2xl bg-slate-800 from-black/90 via-black/80 to-black/90
-    backdrop-blur-2xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.75)] 
-    p-8 space-y-6 text-white' >
-
-
-            <input type="text" className='w-full p-3 rounded-xl bg-white/10 backdrop-blur-lg border
-        border-white/20 placeholder-gray-400 text-white focus:outline-none focus:ring-2
-        focus:ring-white/30' placeholder='Enter topic (e.g.Web Development)' onChange={(e) => setTopic(e.target.value)}
-                value={topic} />
-
-            <input type="text" className='w-full p-3 rounded-xl bg-white/10 backdrop-blur-lg border
-        border-white/20 placeholder-gray-400 text-white focus:outline-none focus:ring-2
-        focus:ring-white/30' placeholder='Class / Level (e.g.Class 10)' onChange={(e) => setClassLevel(e.target.value)}
-                value={classLevel} />
-
-            <input type="text" className='w-full p-3 rounded-xl bg-white/10 backdrop-blur-lg border
-        border-white/20 placeholder-gray-400 text-white focus:outline-none focus:ring-2
-        focus:ring-white/30' placeholder='Exam Type (e.g.CBSE, JEE, NEET)' onChange={(e) => setExamType(e.target.value)}
-                value={examType} />
-
-            <div className='flex flex-col md:flex-row gap-6'>
-                <Toggle label="Exam RevisionMode" checked={revisionMode} onChange={() => setRevisionMode(!revisionMode)} />
-                <Toggle label="Include Diagram " checked={includeDiagram} onChange={() => setIncludeDiagram(!includeDiagram)} />
-                <Toggle label="Include Charts " checked={includeChart} onChange={() => setIncludeChart(!includeChart)} />
-            </div>
-
-
-            <motion.button
-                onClick={handlesubmit}
-                whileHover={!loading ? { scale: 1.02 } : {}}
-                whileTap={!loading ? { scale: 0.95 } : {}}
-                disabled={loading} className={`w-full mt-4 py-3 rounded-xl font-semibold flex items-center justify-center
-            gap-3 transition
-            ${loading
-                        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                        : "bg-gradient-to-br from-white to-gray-200 text-black "
-                    }`}>
-                {loading ? "Generating Notes..." : "Generate Notes"}
-
-            </motion.button>
-
-            {loading &&
-                <div className='mt-4 space-y-2'>
-                    <div className='w-full h-2 rounded-full bg-white/10 overflow-hidden'>
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progress}%` }}
-                            transition={{ ease: "easeOut", duration: 0.6 }}
-                            className='h-full bg-gradient-to-r from-green-400 via-emerald-400 to-green-500'>
-
-                        </motion.div>
-
-                    </div>
-
-
-                    <div className='flex justify-between text-xs text-gray-300'>
-                        <span>{progressText}</span>
-                        <span>{progress}%</span>
-                    </div>
-                    <p className='text-us text-gray-400 text-center'>
-                        This may take up to 2-5 minutes. Please don't close or refresh the page.
-                    </p>
-
-
-                </div>}
-
-
-        </motion.div>
-    )
+      {loading && (
+        <div className="space-y-2" aria-live="polite">
+          <div className="h-2 overflow-hidden rounded-full bg-blue-50" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-label="Notes generation progress">
+            <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ ease: "easeOut", duration: 0.6 }} className="h-full rounded-full bg-blue-500" />
+          </div>
+          <div className="flex justify-between gap-3 text-xs text-muted"><span>{progressText}</span><span>{progress}%</span></div>
+          <p className="text-center text-xs text-muted">This may take a few minutes. Please keep this page open.</p>
+        </div>
+      )}
+    </form>
+  )
 }
 
-function Toggle({ label, checked, onChange }) {
-    return (
-        <div
-            className="flex items-center gap-4 cursor-pointer select-none"
-            onClick={onChange}
-        >
-            <motion.div
-                animate={{
-                    backgroundColor: checked
-                        ? "rgba(34,197,94,0.35)"
-                        : "rgba(255,255,255,0.15)",
-                }}
-                transition={{ duration: 0.25 }}
-                className="relative w-12 h-6 rounded-full
-                border border-white/20
-                backdrop-blur-lg"
-            >
-                <motion.div
-                    animate={{
-                        x: checked ? 22 : 0,
-                    }}
-                    transition={{
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 30,
-                    }}
-                    className="absolute top-0.5 left-1
-                    h-5 w-5 rounded-full bg-white"
-                />
-            </motion.div>
-
-            <span
-                className={`text-sm transition-colors duration-300 ${checked
-                    ? "text-green-300"
-                    : "text-gray-300"
-                    }`}
-            >
-                {label}
-            </span>
-        </div>
-    );
+function Toggle({ label, description, checked, onChange }) {
+  return (
+    <div className="flex items-center gap-3">
+      <button type="button" role="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)} className={`relative h-7 w-12 shrink-0 rounded-full transition-colors focus:outline-none focus:ring-4 focus:ring-blue-100 ${checked ? "bg-blue-600" : "bg-slate-300"}`}>
+        <span aria-hidden="true" className={`absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${checked ? "translate-x-5" : "translate-x-0"}`} />
+      </button>
+      <span><span className="block text-sm font-semibold text-ink">{label}</span><span className="mt-0.5 block text-xs text-muted">{description}</span></span>
+    </div>
+  )
 }

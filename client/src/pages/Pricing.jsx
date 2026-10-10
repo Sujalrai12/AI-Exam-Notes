@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom"
 import {motion} from "motion/react"
 import { serverUrl } from '../App'
 import axios from 'axios'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 export const Pricing = () => {
   const navigate = useNavigate()
@@ -30,9 +31,12 @@ export const Pricing = () => {
   }
   return (
     <div className='min-h-screen bg-gray-100 px-6 py-10 relative'>
-      <button onClick={()=>navigate("/")} className='flex items-center gap-2 text-gray-600 hover:text-black mb-6'>
-        ⬅️ Back
-      </button>
+      <div className='mb-6 flex items-center justify-between'>
+        <button onClick={()=>navigate("/")} className='flex items-center gap-2 text-gray-600 hover:text-black'>
+          ⬅️ Back
+        </button>
+        <ThemeToggle />
+      </div>
 
       <motion.div
       initial={{opacity:0, y:-10}}

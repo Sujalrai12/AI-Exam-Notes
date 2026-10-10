@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { getCurrentUser } from '../../services/api';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ThemeToggle } from '../components/ThemeToggle'
 
 export const PaymentSuccess = () => {
   const dispatch = useDispatch()
@@ -19,7 +20,8 @@ export const PaymentSuccess = () => {
     return ()=>clearTimeout(t)
   },[])
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center p-4 gap-4'>
+    <div className='relative min-h-screen flex flex-col items-center justify-center p-4 gap-4'>
+       <ThemeToggle className="absolute right-5 top-5" />
        <motion.div 
        initial={{scale:0,rotate:-100}}
        animate={{scale:1, rotate:360}}

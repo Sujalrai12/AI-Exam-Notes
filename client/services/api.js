@@ -20,9 +20,18 @@ export const generateNotes = async (payload) =>{
         console.log(result.data)
         return result.data
     } catch (error) {
-        console.log(error)
+        throw new Error(error.response?.data?.message || error.message || "Failed to generate notes")
     }
 
+}
+
+export const generateQuickQuiz = async (noteId) => {
+    try {
+        const result = await axios.post(`${serverUrl}/api/notes/${noteId}/quick-quiz`, {}, { withCredentials: true })
+        return result.data.quickQuiz
+    } catch (error) {
+        throw new Error(error.response?.data?.message || error.message || "Failed to generate quiz")
+    }
 }
 
 const downloadBlob = (blob, fileName) => {

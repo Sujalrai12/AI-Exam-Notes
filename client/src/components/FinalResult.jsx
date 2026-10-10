@@ -1,47 +1,58 @@
-import React, { useState } from 'react'
+import { useState } from "react"
 import ReactMarkdown from "react-markdown"
-import { MermaidSetup } from './MermaidSetup'
-import { ReChartSetup } from './ReChartSetup'
-import { downloadPdf } from '../../services/api'
+import { MermaidSetup } from "./MermaidSetup"
+import { ReChartSetup } from "./ReChartSetup"
+import { QuickQuiz } from "./QuickQuiz"
+import { downloadPdf, generateQuickQuiz } from "../../services/api"
 
-const markDownComponent = {
-  h1: ({ children }) => (
-    <h1 className="text-2xl font-bold □text-indigo-700 mt-6 mb-4 border-">
-      {children}
-    </h1>
-  ),
-
-  h2: ({ children }) => (
-    <h2 className="text-xl font-semibold □text-indigo-600 mt-5 mb-3">
-      {children}
-    </h2>
-  ),
-
-  h3: ({ children }) => (
-    <h3 className="text-lg font-semibold □text-gray-800 mt-4 mb-2">
-      {children}
-    </h3>
-  ),
-
-  p: ({ children }) => (
-    <p className="□text-gray-700 leading-relaxed mb-3">
-      {children}
-    </p>
-  ),
-
-  ul: ({ children }) => (
-    <ul className="list-disc ml-6 space-y-1 □text-gray-700">
-      {children}
-    </ul>
-  ),
-
-  li: ({ children }) => (
-    <li className='marker:text-indigo-500'>{children}</li>
-  ),
+const markdownComponents = {
+  h1: ({ children }) => <h1 className="mb-4 mt-7 border-b border-slate-100 pb-2 text-2xl font-bold text-ink">{children}</h1>,
+  h2: ({ children }) => <h2 className="mb-3 mt-6 text-xl font-semibold text-ink">{children}</h2>,
+  h3: ({ children }) => <h3 className="mb-2 mt-5 text-lg font-semibold text-ink">{children}</h3>,
+  p: ({ children }) => <p className="mb-3 leading-7 text-slate-700">{children}</p>,
+  ul: ({ children }) => <ul className="mb-4 ml-6 list-disc space-y-1 text-slate-700">{children}</ul>,
+  ol: ({ children }) => <ol className="mb-4 ml-6 list-decimal space-y-1 text-slate-700">{children}</ol>,
+  li: ({ children }) => <li className="marker:text-blue-500">{children}</li>,
+  blockquote: ({ children }) => <blockquote className="my-4 border-l-4 border-blue-200 pl-4 text-slate-600">{children}</blockquote>,
+  code: ({ children }) => <code className="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-blue-800">{children}</code>,
 }
 
 export const FinalResult = ({ result }) => {
   const [quickRevision, setQuickRevision] = useState(false)
+  const [quizOpen, setQuizOpen] = useState(false)
+  const [quizQuestions, setQuizQuestions] = useState(result?.quickQuiz || [])
+  const [quizLoading, setQuizLoading] = useState(false)
+  const [quizError, setQuizError] = useState("")
+
+  const handleQuickQuiz = async () => {
+    setQuizError("")
+    if (quizOpen) {
+      setQuizOpen(false)
+      return
+    }
+
+    if (quizQuestions.length > 0) {
+      setQuizOpen(true)
+      return
+    }
+
+    if (!result.noteId) {
+      setQuizError("Save these notes before generating a quiz.")
+      return
+    }
+
+    setQuizLoading(true)
+    try {
+      const generatedQuiz = await generateQuickQuiz(result.noteId)
+      setQuizQuestions(generatedQuiz)
+      setQuizOpen(true)
+    } catch (error) {
+      setQuizError(error.message || "We couldn't generate the quiz. Please try again.")
+    } finally {
+      setQuizLoading(false)
+    }
+  }
+
   const handleDownloadPdf = async () => {
     try {
       await downloadPdf(result)
@@ -50,149 +61,88 @@ export const FinalResult = ({ result }) => {
     }
   }
 
-  if (
-    !result ||
-    !result.subTopics ||
-    !result.questions ||
-    !result.questions.short ||
-    !result.questions.long ||
-    !result.revisionPoints
-  ) {
-    return null;
+  if (!result?.subTopics || !result?.questions?.short || !result?.questions?.long || !result?.revisionPoints) {
+    return null
   }
-  return (
-    <div className='mt-6 p-3 space-y-10 bg-white'>
-      <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
-        <h2 className='text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 
-        bg-clip-text text-transparent'>
-          📘 Generated Notes
-        </h2>
 
-        <div className='flex gap-3'>
-          <button onClick={() => setQuickRevision(!quickRevision)} className={`px-4 py-2 rounded-lg text-sm font-medium transition
-            ${quickRevision
-              ? "bg-green-600 text-white"
-              : "bg-green-100 text-green-700 hover:bg-green-200"
-            }`}> {quickRevision ? "Exit Revision Mode" : "Quick Revision (5 min)"}</button>
-          <button onClick={handleDownloadPdf} className='px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white 
-          hover:bg-indigo-700'>
-            ⬇️ Download PDF
+  return (
+    <div className="space-y-8">
+      <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-blue-600">Your study guide</p>
+          <h2 className="mt-1 text-2xl font-bold tracking-tight text-ink">Generated notes</h2>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={() => setQuickRevision((value) => !value)} aria-pressed={quickRevision} className={`rounded-lg border px-3.5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4 focus:ring-blue-100 ${quickRevision ? "border-blue-600 bg-blue-600 text-white" : "border-slate-200 bg-white text-ink hover:border-blue-200 hover:bg-blue-50 hover:cursor-pointer"}`}>
+            {quickRevision ? "Show full notes" : "Quick revision"}
+          </button>
+          <button type="button" onClick={handleQuickQuiz} disabled={quizLoading} aria-expanded={quizOpen} className="quick-quiz-action rounded-lg border px-3.5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4 disabled:cursor-wait disabled:opacity-60">
+            {quizLoading ? "Preparing quiz..." : quizOpen ? "Hide quiz" : quizQuestions.length > 0 ? "Take quick quiz" : "Generate quick quiz"}
+          </button>
+          <button type="button" onClick={handleDownloadPdf} className="rounded-lg bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 hover:cursor-pointer">
+            Download PDF <span aria-hidden="true">↓</span>
           </button>
         </div>
       </div>
 
-      {!quickRevision && <section>
-        <SectionHeader icon="⭐" title="Sub Topics" color="indigo" />
-        {
-          Object.entries(result.subTopics).map(([star, topics]) => (
-            <div key={star} >
-              <p className='font-medium text-indigo-600 mb-1'>
-                {star} 
-              </p>
-              <ul className='list-disc ml-6 text-gray-700'>
-                {topics.map((t, i) => (
-                  <li key={i}>{t}</li>
-                ))}
-              </ul>
+      {quizError && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{quizError}</p>}
+      {quizOpen && <QuickQuiz key={quizQuestions.map((question) => question.question).join("|")} questions={quizQuestions} />}
 
+      {quickRevision ? (
+        <section className="rounded-xl border border-blue-100 bg-blue-50/70 p-5 sm:p-6">
+          <SectionHeader icon="✦" title="Quick revision points" />
+          <ul className="ml-5 list-disc space-y-2 text-sm leading-6 text-slate-700 sm:text-base">
+            {result.revisionPoints.map((point, index) => <li key={index}>{point}</li>)}
+          </ul>
+        </section>
+      ) : (
+        <>
+          <section>
+            <SectionHeader icon="✦" title="Subtopics to focus on" />
+            <div className="grid gap-3 sm:grid-cols-2">
+              {Object.entries(result.subTopics).map(([priority, topics]) => (
+                <div key={priority} className="rounded-xl border border-slate-100 bg-[#fbfcff] p-4">
+                  <p className="mb-2 text-sm font-semibold text-blue-700">{priority}</p>
+                  <ul className="ml-5 list-disc space-y-1 text-sm leading-6 text-slate-700">
+                    {topics.map((topic, index) => <li key={`${priority}-${index}`}>{topic}</li>)}
+                  </ul>
+                </div>
+              ))}
             </div>
-          ))
-        }
-      </section>}
+          </section>
 
-      {!quickRevision && <section>
-        <SectionHeader icon="📝" title="Detailed Notes" color="purple" />
-        <div className='bg-white border border-gray-200 rounded-xl p-6'>
-          <ReactMarkdown components={markDownComponent}>
-            {result.notes}
-
-          </ReactMarkdown>
-        </div>
-      </section>}
-
-      {quickRevision && <section className='rounded-xl bg-gradient-to-r from-green-100 to-green-100 
-      to-green-50 border border-green-200 p-6'>
-        <h3 className='font-bold text-green-700 mb-3 text-lg'>
-          ⚡Exam Quick Revision Points
-        </h3>
-        <ul className='list-disc ml-6 space-y-1 text-gray-800'>
-          {result.revisionPoints.map((p, i) => (
-            <li key={i}>{p}</li>
-          ))}
-        </ul>
-
-      </section>}
-
-      {result.diagram?.data && <section>
-        <SectionHeader icon="📊" title="Diagram" color="cyan" />
-        <MermaidSetup diagram={result.diagram?.data} />
-        <p className='mt-3 text-xs text-gray-500 itlaic'>
-          ℹ️ if you need this diagram for future reference or revision,
-          you can save it by taking a screenshot.
-        </p>
-
-      </section>}
-
-      {result.charts?.length > 0 && <section>
-        <SectionHeader icon="📈" title="Visual Charts" color="indigo" />
-        <ReChartSetup charts={result.charts} />
-        <p className='mt-3 text-xs text-gray-500 itlaic'>
-          ℹ️ if you need this Chart for future reference or revision,
-          you can save it by taking a screenshot.
-        </p>
-      </section>}
-
-      {result.charts && result.charts.length === 0 && (
-        <p className='text-sm text-gray-400 italic'>
-          📉 Charts are not relevant for this topic.
-        </p>
+          <section>
+            <SectionHeader icon="▤" title="Detailed notes" />
+            <article className="rounded-xl border border-slate-100 bg-white p-4 sm:p-6">
+              <ReactMarkdown components={markdownComponents}>{result.notes}</ReactMarkdown>
+            </article>
+          </section>
+        </>
       )}
 
+      {result.diagram?.data && <section><SectionHeader icon="⌘" title="Diagram" /><MermaidSetup diagram={result.diagram.data} /></section>}
+      {result.charts?.length > 0 && <section><SectionHeader icon="▥" title="Charts and tables" /><ReChartSetup charts={result.charts} /></section>}
       <section>
-        <SectionHeader icon="❓" title="Important Questions" color="rose" />
-
-        <p className='font-medium'>Short Questions:</p>
-        <ul className='list-disc ml-6 text-gray-700'>
-          {result.questions.short.map((q, i) => (
-            <li key={i}>{q}</li>
-          ))}
-        </ul>
-
-        <p className='font-medium mt-4'>Long Questions:</p>
-        <ul className='list-disc ml-6 text-gray-700'>
-          {result.questions.long.map((q, i) => (
-            <li key={i}>{q}</li>
-          ))}
-        </ul>
-
-        <p className='font-medium'>Diagram Question:</p>
-        <ul className='list-disc ml-6 text-gray-700'>
-          <li>{result.questions.diagram}</li>
-
-        </ul>
-
+        <SectionHeader icon="?" title="Important questions" />
+        <div className="grid gap-4 md:grid-cols-2">
+          <QuestionGroup title="Short questions" questions={result.questions.short} />
+          <QuestionGroup title="Long questions" questions={result.questions.long} />
+          <QuestionGroup title="Diagram question" questions={[result.questions.diagram].filter(Boolean)} />
+        </div>
       </section>
     </div>
   )
 }
 
-function SectionHeader({ icon, title, color }) {
-  const colors = {
-    indigo: "from-indigo-100 to-indigo-50 text-indigo-700",
-    purple: "from-purple-100 to-purple-50 text-purple-700",
-    blue: "from-blue-100 to-blue-50 text-blue-700",
-    green: "from-green-100 to-green-50 text-green-700",
-    cyan: "from-cyan-100 to-cyan-50 text-cyan-700",
-    rose: "from-rose-100 to-rose-50 text-rose-700",
-  }
+function SectionHeader({ icon, title }) {
+  return <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-ink"><span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-sm text-blue-600" aria-hidden="true">{icon}</span>{title}</h3>
+}
+
+function QuestionGroup({ title, questions }) {
   return (
-    <div className={`
-      mb-4 px-4 py-2 rounded-lg bg-gradient-to-r ${colors[color]} font-semibold
-       flex items-center gap-2`}>
-      <span>{icon}</span>
-      <span>{title}</span>
-
+    <div className="rounded-xl border border-slate-100 bg-[#fbfcff] p-4">
+      <h4 className="text-sm font-semibold text-ink">{title}</h4>
+      {questions.length > 0 ? <ul className="mt-2 ml-5 list-disc space-y-1.5 text-sm leading-6 text-slate-700">{questions.map((question, index) => <li key={index}>{question}</li>)}</ul> : <p className="mt-2 text-sm text-muted">No questions provided.</p>}
     </div>
-
   )
 }

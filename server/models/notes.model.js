@@ -22,6 +22,10 @@ const notesSchema = new mongoose.Schema({
         default :false
 
     },
+    quickQuizMode :{
+        type :Boolean,
+        default :false
+    },
     includeDiagram :Boolean,
     includeChart :Boolean,
 

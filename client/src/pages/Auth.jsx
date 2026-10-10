@@ -7,6 +7,8 @@ import axios from "axios"
 import { serverUrl } from "../App"
 import { useDispatch } from "react-redux"
 import { setUserData } from "../redux/userSlice"
+import { ThemeToggle } from "../components/ThemeToggle"
+import logo from "../assets/logo.png"
 
 const Auth = () => {
   const dispatch = useDispatch()
@@ -69,10 +71,18 @@ const Auth = () => {
       <motion.header
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-6xl rounded-2xl bg-slate-800 px-6 py-5 text-white shadow-xl sm:px-8"
+        className="mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-2xl bg-slate-800 px-6 py-5 text-white shadow-xl sm:px-8"
       >
-        <h1 className="text-2xl font-bold">ExamNotes AI</h1>
-        <p className="mt-1 text-sm text-slate-300">AI-powered exam-oriented notes &amp; revision</p>
+        <div className="flex items-center gap-3">
+          <img src={logo} alt="ExamNotes" className="h-12 w-12 shrink-0 rounded-md object-cover ring-1 ring-rule" />
+          <div>
+            <span className="font-serif text-xl font-semibold tracking-tight">
+              ExamNotes
+            </span>
+            <p className="mt-1 text-sm text-slate-300">AI-powered exam-oriented notes &amp; revision</p>
+          </div>
+        </div>
+        <ThemeToggle className="shrink-0" />
       </motion.header>
 
       <main className="mx-auto grid max-w-6xl items-center gap-12 py-10 lg:grid-cols-[1fr_0.9fr] lg:gap-20 lg:py-16">
@@ -81,9 +91,9 @@ const Auth = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.45 }}
         >
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">Study smarter</p>
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] ">Study smarter</p>
           <h2 className="max-w-xl text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">
-            Unlock smarter <span className="text-blue-600">AI notes.</span>
+            Unlock smarter <span className="text-yellow-400">AI notes.</span>
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
             Create exam-ready notes, project documentation, diagrams, and printable PDFs in moments.

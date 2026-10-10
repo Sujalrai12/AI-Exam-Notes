@@ -1,10 +1,251 @@
 @import "tailwindcss";
 
-*{
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+  --color-paper: #f7f9ff;
+  --color-ink: #17213b;
+  --color-highlight: #315bff;
+  --color-navy: #17213b;
+  --color-rule: #dfe5f0;
+  --color-muted: #64708a;
 }
 
-*::-webkit-scrollbar{
-    display: none;
+html,
+body,
+#root {
+  min-height: 100%;
 }
+
+body {
+  margin: 0;
+  background: #f7f9ff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c4bbae transparent;
+}
+
+::selection {
+  background: #f6e2a2;
+  color: #1b2a4a;
+}
+
+html.dark-theme {
+  --color-paper: #0b1220;
+  --color-ink: #edf3ff;
+  --color-highlight: #86a2ff;
+  --color-navy: #e8eeff;
+  --color-rule: #2a3850;
+  --color-muted: #abb8ce;
+  color-scheme: dark;
+  background-color: #0b1220;
+}
+
+html.dark-theme body,
+html.dark-theme #root {
+  background-color: #0b1220;
+  color: #edf3ff;
+}
+
+html.dark-theme .bg-white,
+html.dark-theme [class~="bg-[#f8faff]"],
+html.dark-theme [class~="bg-[#fbfcff]"],
+html.dark-theme [class~="bg-[#f5f8ff]"],
+html.dark-theme [class~="bg-[#f5f7fb]"],
+html.dark-theme [class~="bg-paper/60"] {
+  background-color: #121d31;
+}
+
+html.dark-theme [class~="bg-gray-50"],
+html.dark-theme [class~="bg-gray-100"],
+html.dark-theme [class~="bg-gray-200"],
+html.dark-theme [class~="bg-slate-50"],
+html.dark-theme [class~="bg-slate-100"] { background-color: #1b2940; }
+html.dark-theme [class~="bg-white/60"] { background-color: rgb(27 41 64 / 60%); }
+html.dark-theme [class~="bg-blue-50"],
+html.dark-theme [class~="bg-blue-50/80"],
+html.dark-theme [class~="bg-blue-50/70"],
+html.dark-theme [class~="bg-blue-50/50"] { background-color: #1b2a49; }
+html.dark-theme [class~="bg-violet-50"] { background-color: #292342; }
+html.dark-theme [class~="bg-emerald-50"] { background-color: #15352f; }
+html.dark-theme [class~="bg-amber-50"] { background-color: #3a3020; }
+html.dark-theme [class~="bg-sky-50"] { background-color: #173249; }
+html.dark-theme [class~="bg-indigo-50"] { background-color: #20294b; }
+html.dark-theme [class~="bg-yellow-50"] { background-color: #39321f; }
+html.dark-theme [class~="bg-red-50"] { background-color: #3b2029; }
+html.dark-theme [class~="bg-green-50"] { background-color: #19372f; }
+html.dark-theme [class~="from-gray-100"] { --tw-gradient-from: #0b1220 var(--tw-gradient-from-position); }
+html.dark-theme [class~="to-gray-200"] { --tw-gradient-to: #0b1220 var(--tw-gradient-to-position); }
+
+html.dark-theme [class~="text-[#111a32]"],
+html.dark-theme .text-ink,
+html.dark-theme [class~="text-slate-900"],
+html.dark-theme [class~="text-slate-800"],
+html.dark-theme [class~="text-slate-700"],
+html.dark-theme [class~="text-gray-900"],
+html.dark-theme [class~="text-gray-800"],
+html.dark-theme [class~="text-gray-700"],
+html.dark-theme [class~="text-black"] { color: #edf3ff; }
+html.dark-theme .text-muted,
+html.dark-theme [class~="text-slate-400"],
+html.dark-theme [class~="text-slate-500"],
+html.dark-theme [class~="text-slate-600"],
+html.dark-theme [class~="text-gray-400"],
+html.dark-theme [class~="text-gray-500"],
+html.dark-theme [class~="text-gray-600"] { color: #b2bfd5; }
+html.dark-theme [class~="text-blue-700"],
+html.dark-theme [class~="text-blue-800"],
+html.dark-theme [class~="text-indigo-600"],
+html.dark-theme [class~="text-indigo-700"] { color: #b8c8ff; }
+html.dark-theme [class~="text-violet-600"],
+html.dark-theme [class~="text-violet-700"] { color: #d0c2ff; }
+html.dark-theme [class~="text-emerald-600"],
+html.dark-theme [class~="text-emerald-700"],
+html.dark-theme [class~="text-green-600"] { color: #8ee0c3; }
+html.dark-theme [class~="text-amber-600"],
+html.dark-theme [class~="text-yellow-600"] { color: #ffd88a; }
+html.dark-theme [class~="text-sky-600"] { color: #8bd7ff; }
+html.dark-theme [class~="text-red-700"] { color: #ffb8c3; }
+
+html.dark-theme [class~="border-slate-100"],
+html.dark-theme [class~="border-slate-200"],
+html.dark-theme [class~="border-slate-200/80"],
+html.dark-theme [class~="border-slate-200/90"],
+html.dark-theme [class~="border-slate-300"],
+html.dark-theme [class~="border-gray-200"],
+html.dark-theme [class~="border-gray-300"],
+html.dark-theme .border-rule { border-color: #2a3850; }
+html.dark-theme [class~="ring-blue-100"],
+html.dark-theme [class~="focus:ring-blue-100"] { --tw-ring-color: #2a426c; }
+html.dark-theme [class~="hover:bg-white"]:hover,
+html.dark-theme [class~="hover:bg-slate-50"]:hover { background-color: #1c2b44; }
+
+html.dark-theme input,
+html.dark-theme textarea,
+html.dark-theme select { color-scheme: dark; }
+
+.quick-quiz-panel {
+  background-color: #fffbeb;
+  border-color: #fde68a;
+}
+.quick-quiz-kicker { color: #92400e; }
+.quick-quiz-score {
+  background-color: #fff;
+  border-color: #fde68a;
+}
+.quick-quiz-card {
+  background-color: #fff;
+  border-color: #fef3c7;
+}
+.quick-quiz-question { color: #17213b; }
+.quick-quiz-number { color: #b45309; }
+.quick-quiz-option {
+  background-color: #fff;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+.quick-quiz-option:not(.cursor-default):not(.quick-quiz-option-selected):hover {
+  background-color: #fffbeb;
+  border-color: #f59e0b;
+}
+.quick-quiz-option-selected {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  color: #1e3a8a;
+}
+.quick-quiz-option-correct {
+  background-color: #ecfdf5;
+  border-color: #86efac;
+  color: #166534;
+}
+.quick-quiz-option-wrong {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+.quick-quiz-feedback { color: #475569; }
+.quick-quiz-submit {
+  background-color: #a16207;
+  color: #fff;
+}
+.quick-quiz-submit:hover:not(:disabled) { background-color: #854d0e; }
+.quick-quiz-submit:focus-visible { --tw-ring-color: #fde68a; }
+.quick-quiz-submit:disabled {
+  background-color: #cbd5e1;
+  color: #64748b;
+}
+.quick-quiz-action {
+  background-color: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+.quick-quiz-action:hover:not(:disabled) {
+  background-color: #fef3c7;
+  border-color: #fbbf24;
+}
+.quick-quiz-action:focus-visible { --tw-ring-color: #fde68a; }
+
+html.dark-theme .quick-quiz-panel {
+  background-color: #172337;
+  border-color: #574a2b;
+}
+html.dark-theme .quick-quiz-kicker { color: #f5c86b; }
+html.dark-theme .quick-quiz-score {
+  background-color: #1c2b44;
+  border-color: #514326;
+}
+html.dark-theme .quick-quiz-card {
+  background-color: #111c2f;
+  border-color: #34445c;
+}
+html.dark-theme .quick-quiz-question { color: #edf3ff; }
+html.dark-theme .quick-quiz-number { color: #ffd88a; }
+html.dark-theme .quick-quiz-option {
+  background-color: #172337;
+  border-color: #34445c;
+  color: #e2e8f0;
+}
+html.dark-theme .quick-quiz-option:not(.cursor-default):not(.quick-quiz-option-selected):hover {
+  background-color: #1f304a;
+  border-color: #7186a7;
+}
+html.dark-theme .quick-quiz-option-selected {
+  background-color: #1d355c;
+  border-color: #6488c9;
+  color: #e2ecff;
+}
+html.dark-theme .quick-quiz-option-correct {
+  background-color: #15372f;
+  border-color: #2b775d;
+  color: #c8f5df;
+}
+html.dark-theme .quick-quiz-option-wrong {
+  background-color: #3b2029;
+  border-color: #8b3f52;
+  color: #ffd2d8;
+}
+html.dark-theme .quick-quiz-feedback { color: #b2bfd5; }
+html.dark-theme .quick-quiz-submit {
+  background-color: #80601d;
+  color: #fff4d6;
+}
+html.dark-theme .quick-quiz-submit:hover:not(:disabled) { background-color: #987326; }
+html.dark-theme .quick-quiz-submit:focus-visible { --tw-ring-color: #574a2b; }
+html.dark-theme .quick-quiz-submit:disabled {
+  background-color: #34445c;
+  color: #aebbd0;
+}
+html.dark-theme .quick-quiz-action {
+  background-color: #302817;
+  border-color: #786330;
+  color: #ffe4a3;
+}
+html.dark-theme .quick-quiz-action:hover:not(:disabled) {
+  background-color: #40351c;
+  border-color: #9a7d3c;
+}
+html.dark-theme .quick-quiz-action:focus-visible { --tw-ring-color: #574a2b; }
