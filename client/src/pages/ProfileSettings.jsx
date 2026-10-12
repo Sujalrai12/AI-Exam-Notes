@@ -32,6 +32,11 @@ const ProfileSettings = () => {
       dispatch(setUserData(response.data))
       setNotice("Your profile has been updated.")
     } catch (requestError) {
+      if (requestError.response?.status === 401) {
+        dispatch(setUserData(null))
+        navigate("/login", { replace: true, state: { message: "Your session expired. Please sign in again." } })
+        return
+      }
       setError(requestError.response?.data?.message || "We couldn't update your profile. Please try again.")
     } finally {
       setProfileBusy(false)
@@ -57,6 +62,11 @@ const ProfileSettings = () => {
       setPasswordOpen(false)
       setNotice("Your password has been updated.")
     } catch (requestError) {
+      if (requestError.response?.status === 401) {
+        dispatch(setUserData(null))
+        navigate("/login", { replace: true, state: { message: "Your session expired. Please sign in again." } })
+        return
+      }
       setError(requestError.response?.data?.message || "We couldn't update your password. Please try again.")
     } finally {
       setPasswordBusy(false)

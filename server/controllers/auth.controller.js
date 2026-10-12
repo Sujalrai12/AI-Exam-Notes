@@ -24,18 +24,23 @@ const passwordMatches = async (password, passwordHash) => {
     return storedBuffer.length === derivedKey.length && timingSafeEqual(storedBuffer, derivedKey)
 }
 
-const isProductionCookie = process.env.NODE_ENV === "production"
-    || process.env.CLIENT_URL?.startsWith("https://")
+const getSessionCookieOptions = (req) => {
+    // Use the forwarded protocol because production TLS is commonly terminated
+    // before the request reaches Express. SameSite=None requires Secure.
+    const isHttps = req.secure || req.get("x-forwarded-proto") === "https"
+        || process.env.NODE_ENV === "production"
+        || process.env.CLIENT_URL?.startsWith("https://")
 
-const sessionCookieOptions = {
-    httpOnly: true,
-    secure: isProductionCookie,
-    sameSite: isProductionCookie ? "none" : "lax"
+    return {
+        httpOnly: true,
+        secure: Boolean(isHttps),
+        sameSite: isHttps ? "none" : "lax"
+    }
 }
 
-const setSessionCookie = (res, userId) => {
+const setSessionCookie = (req, res, userId) => {
     const token = getToken(userId)
-    res.cookie("token", token, { ...sessionCookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 })
+    res.cookie("token", token, { ...getSessionCookieOptions(req), maxAge: 7 * 24 * 60 * 60 * 1000 })
 }
 
 export const register = async (req, res) => {
@@ -83,7 +88,7 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: "Email or password is incorrect" })
         }
 
-        setSessionCookie(res, user._id)
+        setSessionCookie(req, res, user._id)
         const userData = user.toObject()
         userData.hasPassword = Boolean(userData.passwordHash)
         delete userData.passwordHash
@@ -104,7 +109,7 @@ export const googleauth = async (req,res)=>{
         if(!user){
             user = await UserModel.create({name: typeof name === "string" && name.trim() ? name.trim() : normalizedEmail, email: normalizedEmail})
         }
-        setSessionCookie(res, user._id)
+        setSessionCookie(req, res, user._id)
         const userData = user.toObject()
         userData.hasPassword = Boolean(userData.passwordHash)
         delete userData.passwordHash
@@ -118,7 +123,7 @@ export const googleauth = async (req,res)=>{
 
 export const logOut = async (req,res) => {
     try{
-        res.clearCookie("token", sessionCookieOptions)
+        res.clearCookie("token", getSessionCookieOptions(req))
         return res.status(200).json({message:"LogOut Successfully"})
     }
     catch(error){

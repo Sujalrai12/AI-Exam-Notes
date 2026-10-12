@@ -6,18 +6,20 @@ import { auth, provider } from "../utils/firebase"
 import axios from "axios"
 import { serverUrl } from "../App"
 import { useDispatch } from "react-redux"
+import { useLocation } from "react-router-dom"
 import { setUserData } from "../redux/userSlice"
 import { ThemeToggle } from "../components/ThemeToggle"
 import logo from "../assets/logo.png"
 
 const Auth = () => {
   const dispatch = useDispatch()
+  const location = useLocation()
   const [mode, setMode] = useState("login")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const [notice, setNotice] = useState("")
+  const [notice, setNotice] = useState(location.state?.message || "")
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (event) => {

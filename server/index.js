@@ -14,6 +14,10 @@ dotenv.config()
 
 const app = express();
 
+// Render and other production hosts terminate TLS at a reverse proxy.
+// Trust the proxy so Express can correctly detect HTTPS requests.
+app.set("trust proxy", 1)
+
 app.post("/api/credits/webhook",
     express.raw({type:"application/json"}),
     stripeWebhook

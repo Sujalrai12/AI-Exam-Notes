@@ -4,17 +4,20 @@ const isAuth = async(req,res,next) =>{
     try{
         let{token} = req.cookies
         if(!token){
-            return res.status(400).json({message:"Token is not found"})
+            return res.status(401).json({message:"Your session has expired. Please sign in again."})
         }
         let verifytoken =  jwt.verify(token, process.env.JWT_SECRET)
         if(!verifytoken){
-            return res.status(400).json({message:"user doesn't have valid token"})
+            return res.status(401).json({message:"Your session is invalid. Please sign in again."})
         }
         req.userId = verifytoken.userId
         next()
         }
     catch(error){
-        return res.status(500).json({message:`is auth error ${error}`})
+        if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+            return res.status(401).json({message:"Your session has expired. Please sign in again."})
+        }
+        return res.status(500).json({message:"Authentication failed. Please try again."})
 
     }
 }
