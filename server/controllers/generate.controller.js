@@ -1,5 +1,5 @@
 import UserModel from "../models/user.model.js"
-import { generateGeminiResponse } from "../services/gemini.services.js"
+import { generateGroqResponse } from "../services/groq.services.js"
 import { buildPrompt, buildQuickQuizPrompt } from "../utils/promptBuilder.js"
 import Notes from "../models/notes.model.js"
 
@@ -41,7 +41,7 @@ export const generateNotes = async (req, res) => {
             includeChart
         })
 
-        const aiResponse = await generateGeminiResponse(prompt)
+        const aiResponse = await generateGroqResponse(prompt)
         
 
         const notes = await Notes.create({
@@ -107,7 +107,7 @@ export const generateQuickQuiz = async (req, res) => {
             examType: note.examType,
             notes: note.content?.notes || ""
         })
-        const generated = await generateGeminiResponse(prompt)
+        const generated = await generateGroqResponse(prompt)
         const quickQuiz = generated?.quickQuiz
         const isValidQuiz = Array.isArray(quickQuiz)
             && quickQuiz.length === 5
