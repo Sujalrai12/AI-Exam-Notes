@@ -47,9 +47,22 @@ const markdownComponents = {
 export const FinalResult = ({ result, compact = false }) => {
   const [quickRevision, setQuickRevision] = useState(false)
   const [quizOpen, setQuizOpen] = useState(false)
-  const [quizQuestions, setQuizQuestions] = useState(result?.quickQuiz || [])
+  const [quizQuestions, setQuizQuestions] = useState(Array.isArray(result?.quickQuiz) ? result.quickQuiz : [])
   const [quizLoading, setQuizLoading] = useState(false)
   const [quizError, setQuizError] = useState("")
+
+  const displayResult = result && typeof result === "object" ? {
+    ...result,
+    notes: typeof result.notes === "string" ? result.notes : "",
+    subTopics: result.subTopics && typeof result.subTopics === "object" && !Array.isArray(result.subTopics) ? result.subTopics : {},
+    revisionPoints: Array.isArray(result.revisionPoints) ? result.revisionPoints : [],
+    questions: {
+      short: Array.isArray(result.questions?.short) ? result.questions.short : [],
+      long: Array.isArray(result.questions?.long) ? result.questions.long : [],
+      diagram: typeof result.questions?.diagram === "string" ? result.questions.diagram : "",
+    },
+    charts: Array.isArray(result.charts) ? result.charts : [],
+  } : null
 
   const handleQuickQuiz = async () => {
     setQuizError("")
@@ -88,9 +101,7 @@ export const FinalResult = ({ result, compact = false }) => {
     }
   }
 
-  if (!result?.subTopics || !result?.questions?.short || !result?.questions?.long || !result?.revisionPoints) {
-    return null
-  }
+  if (!displayResult) return null
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -119,7 +130,7 @@ export const FinalResult = ({ result, compact = false }) => {
         <section className="rounded-xl border border-blue-100 bg-blue-50/70 p-5 sm:p-6">
           <SectionHeader icon="✦" title="Quick revision points" />
           <ul className="ml-5 list-disc space-y-2 text-sm leading-6 text-slate-700 sm:text-base">
-            {result.revisionPoints.map((point, index) => <li key={index}>{point}</li>)}
+            {displayResult.revisionPoints.map((point, index) => <li key={index}>{point}</li>)}
           </ul>
         </section>
       ) : (
@@ -127,11 +138,11 @@ export const FinalResult = ({ result, compact = false }) => {
           <section>
             <SectionHeader icon="✦" title="Subtopics to focus on" />
             <div className="grid gap-3 sm:grid-cols-2">
-              {Object.entries(result.subTopics).map(([priority, topics]) => (
+              {Object.entries(displayResult.subTopics).map(([priority, topics]) => (
                 <div key={priority} className="rounded-xl border border-slate-100 bg-[#fbfcff] p-4">
                   <p className="mb-2 text-sm font-semibold text-blue-700">{priority}</p>
                   <ul className="ml-5 list-disc space-y-1 text-sm leading-6 text-slate-700">
-                    {topics.map((topic, index) => <li key={`${priority}-${index}`}>{topic}</li>)}
+                    {(Array.isArray(topics) ? topics : []).map((topic, index) => <li key={`${priority}-${index}`}>{topic}</li>)}
                   </ul>
                 </div>
               ))}
@@ -141,20 +152,20 @@ export const FinalResult = ({ result, compact = false }) => {
           <section>
             <SectionHeader icon="▤" title="Detailed notes" />
             <article className="overflow-hidden rounded-xl border border-slate-100 bg-white p-3 [overflow-wrap:anywhere] sm:p-6">
-              <ReactMarkdown components={markdownComponents}>{result.notes}</ReactMarkdown>
+              {displayResult.notes ? <ReactMarkdown components={markdownComponents}>{displayResult.notes}</ReactMarkdown> : <p role="status" className="text-sm text-slate-600">Detailed notes were missing from the AI response. Please try generating them again.</p>}
             </article>
           </section>
         </>
       )}
 
-      {result.diagram?.data && <section><SectionHeader icon="⌘" title="Diagram" /><MermaidSetup diagram={result.diagram.data} /></section>}
-      {result.charts?.length > 0 && <section><SectionHeader icon="▥" title="Charts and tables" /><ReChartSetup charts={result.charts} /></section>}
+      {displayResult.diagram?.data && <section><SectionHeader icon="⌘" title="Diagram" /><MermaidSetup diagram={displayResult.diagram.data} /></section>}
+      {displayResult.charts.length > 0 && <section><SectionHeader icon="▥" title="Charts and tables" /><ReChartSetup charts={displayResult.charts} /></section>}
       <section>
         <SectionHeader icon="?" title="Important questions" />
         <div className="grid gap-4 md:grid-cols-2">
-          <QuestionGroup title="Short questions" questions={result.questions.short} />
-          <QuestionGroup title="Long questions" questions={result.questions.long} />
-          <QuestionGroup title="Diagram question" questions={[result.questions.diagram].filter(Boolean)} />
+          <QuestionGroup title="Short questions" questions={displayResult.questions.short} />
+          <QuestionGroup title="Long questions" questions={displayResult.questions.long} />
+          <QuestionGroup title="Diagram question" questions={[displayResult.questions.diagram].filter(Boolean)} />
         </div>
       </section>
     </div>

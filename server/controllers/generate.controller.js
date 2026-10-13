@@ -1,7 +1,16 @@
 import UserModel from "../models/user.model.js"
 import { generateGroqResponse } from "../services/groq.services.js"
-import { buildPrompt, buildQuickQuizPrompt } from "../utils/promptBuilder.js"
+import { buildPrompt, buildExamQuestionsPrompt, buildQuickQuizPrompt } from "../utils/promptBuilder.js"
 import Notes from "../models/notes.model.js"
+
+const hasRequiredQuestions = (questions) => Array.isArray(questions?.short)
+    && questions.short.length === 5
+    && questions.short.every((question) => typeof question === "string" && question.trim())
+    && Array.isArray(questions?.long)
+    && questions.long.length === 3
+    && questions.long.every((question) => typeof question === "string" && question.trim())
+    && typeof questions?.diagram === "string"
+    && questions.diagram.trim().length > 0
 
 export const generateNotes = async (req, res) => {
     try {
@@ -42,6 +51,30 @@ export const generateNotes = async (req, res) => {
         })
 
         const aiResponse = await generateGroqResponse(prompt)
+        if (!aiResponse || typeof aiResponse !== "object" || Array.isArray(aiResponse)) {
+            const error = new Error("The AI returned notes in an unexpected format. Please try again.")
+            error.statusCode = 502
+            throw error
+        }
+
+        if (!hasRequiredQuestions(aiResponse?.questions)) {
+            const questionsPrompt = buildExamQuestionsPrompt({
+                topic,
+                classLevel,
+                examType,
+                notes: aiResponse?.notes || ""
+            })
+            const questionsResponse = await generateGroqResponse(questionsPrompt)
+            if (hasRequiredQuestions(questionsResponse?.questions)) {
+                aiResponse.questions = questionsResponse.questions
+            }
+        }
+
+        if (!hasRequiredQuestions(aiResponse?.questions)) {
+            const error = new Error("The AI did not return the required exam questions. Please try generating the notes again.")
+            error.statusCode = 502
+            throw error
+        }
         
 
         const notes = await Notes.create({
