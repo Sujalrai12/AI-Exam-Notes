@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ai-exam-notes-client-y9mw.onrender.com/sitemap.xml
