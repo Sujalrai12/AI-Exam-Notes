@@ -1,19 +1,46 @@
-import { useState } from "react"
+import { cloneElement, isValidElement, useState } from "react"
 import ReactMarkdown from "react-markdown"
+import katex from "katex"
+import "katex/dist/katex.min.css"
 import { MermaidSetup } from "./MermaidSetup"
 import { ReChartSetup } from "./ReChartSetup"
 import { QuickQuiz } from "./QuickQuiz"
 import { downloadPdf, generateQuickQuiz } from "../../services/api"
 
+const renderMath = (content) => {
+  if (Array.isArray(content)) return content.map(renderMath)
+  if (isValidElement(content)) {
+    if (content.type === markdownComponents.code) return content
+    return cloneElement(content, undefined, renderMath(content.props.children))
+  }
+  if (typeof content !== "string") return content
+
+  const pieces = content.split(/(\$\$[\s\S]+?\$\$|\$[^$\n]+\$)/g)
+  if (pieces.length === 1) return content
+
+  return pieces.map((piece, index) => {
+    const isBlock = piece.startsWith("$$") && piece.endsWith("$$")
+    const isInline = piece.startsWith("$") && piece.endsWith("$")
+    if (!isBlock && !isInline) return piece
+
+    const expression = piece.slice(isBlock ? 2 : 1, isBlock ? -2 : -1).trim()
+    try {
+      return <span key={index} dangerouslySetInnerHTML={{ __html: katex.renderToString(expression, { displayMode: isBlock, throwOnError: false }) }} />
+    } catch {
+      return piece
+    }
+  })
+}
+
 const markdownComponents = {
-  h1: ({ children }) => <h1 className="mb-3 mt-5 border-b border-slate-100 pb-2 text-xl font-bold text-ink sm:mb-4 sm:mt-7 sm:text-2xl">{children}</h1>,
-  h2: ({ children }) => <h2 className="mb-2 mt-5 text-lg font-semibold text-ink sm:mb-3 sm:mt-6 sm:text-xl">{children}</h2>,
-  h3: ({ children }) => <h3 className="mb-2 mt-4 text-base font-semibold text-ink sm:mt-5 sm:text-lg">{children}</h3>,
-  p: ({ children }) => <p className="mb-3 leading-7 text-slate-700">{children}</p>,
+  h1: ({ children }) => <h1 className="mb-3 mt-5 border-b border-slate-100 pb-2 text-xl font-bold text-ink sm:mb-4 sm:mt-7 sm:text-2xl">{renderMath(children)}</h1>,
+  h2: ({ children }) => <h2 className="mb-2 mt-5 text-lg font-semibold text-ink sm:mb-3 sm:mt-6 sm:text-xl">{renderMath(children)}</h2>,
+  h3: ({ children }) => <h3 className="mb-2 mt-4 text-base font-semibold text-ink sm:mt-5 sm:text-lg">{renderMath(children)}</h3>,
+  p: ({ children }) => <p className="mb-3 leading-7 text-slate-700">{renderMath(children)}</p>,
   ul: ({ children }) => <ul className="mb-4 ml-6 list-disc space-y-1 text-slate-700">{children}</ul>,
   ol: ({ children }) => <ol className="mb-4 ml-6 list-decimal space-y-1 text-slate-700">{children}</ol>,
-  li: ({ children }) => <li className="marker:text-blue-500">{children}</li>,
-  blockquote: ({ children }) => <blockquote className="my-4 border-l-4 border-blue-200 pl-4 text-slate-600">{children}</blockquote>,
+  li: ({ children }) => <li className="marker:text-blue-500">{renderMath(children)}</li>,
+  blockquote: ({ children }) => <blockquote className="my-4 border-l-4 border-blue-200 pl-4 text-slate-600">{renderMath(children)}</blockquote>,
   code: ({ children }) => <code className="rounded bg-slate-100 px-1.5 py-0.5 text-sm text-blue-800">{children}</code>,
 }
 
