@@ -141,7 +141,7 @@ export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
         disabled={loading || !topic.trim()}
         className="flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(49,91,255,0.18)] transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
       >
-        <span aria-hidden="true">✦</span>{loading ? "Generating notes..." : "Generate notes"}<span aria-hidden="true">→</span>
+        <span aria-hidden="true"></span>{loading ? "Generating notes..." : "Generate notes"}<span aria-hidden="true">→</span>
       </motion.button>
 
       {loading && (

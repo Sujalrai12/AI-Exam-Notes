@@ -78,7 +78,7 @@ const Auth = () => {
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <img src={logo} alt="ExamNotes" className="h-10 w-10 shrink-0 rounded-md object-cover ring-1 ring-rule sm:h-12 sm:w-12" />
           <div className="min-w-0">
-            <span className="font-serif text-lg font-semibold tracking-tight sm:text-xl">
+            <span className="font-sans text-lg font-semibold tracking-tight sm:text-xl">
               ExamNotes
             </span>
             <p className="mt-0.5 max-w-[190px] text-[11px] leading-4 text-slate-300 sm:mt-1 sm:max-w-none sm:text-sm">AI-powered exam-oriented notes &amp; revision</p>
@@ -95,24 +95,20 @@ const Auth = () => {
           className="min-w-0"
         >
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] sm:mb-4 sm:text-sm sm:tracking-[0.2em]">Study smarter</p>
-          <h2 className="max-w-xl text-3xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-            Unlock smarter <span className="text-yellow-400">AI notes.</span>
+          <h2 className="max-w-xl text-3xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+            Prepare a study guide for your next exam.
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 sm:mt-6 sm:text-lg sm:leading-8">
-            Create exam-ready notes, project documentation, diagrams, and printable PDFs in moments.
+            Generate notes with important questions, diagrams, and revision points. Save them to your history or download a PDF.
           </p>
-          <div className="mt-4 grid grid-cols-2 gap-2 text-[11px] font-medium text-slate-700 sm:mt-8 sm:flex sm:flex-wrap sm:gap-3 sm:text-sm">
-            <span className="min-w-0 rounded-full bg-white px-2.5 py-2 shadow-sm sm:px-4">🎁 50 free credits</span>
-            <span className="min-w-0 rounded-full bg-white px-2.5 py-2 shadow-sm sm:px-4">📘 Revision-ready notes</span>
-            <span className="col-span-2 rounded-full bg-white px-2.5 py-2 shadow-sm sm:col-span-1 sm:px-4">⬇️ PDF downloads</span>
-          </div>
+          <p className="mt-4 text-sm font-medium text-slate-700 sm:mt-8">50 starter credits · Notes history · PDF downloads</p>
         </motion.section>
 
         <motion.section
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.1 }}
-          className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/60 sm:rounded-3xl sm:p-9"
+          className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-8"
         >
           <div className="mb-4 sm:mb-7">
             <h3 className="text-xl font-bold sm:text-2xl">{isRegistering ? "Create your account" : "Welcome back"}</h3>

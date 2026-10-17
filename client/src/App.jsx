@@ -9,7 +9,7 @@ import ProfileSettings from './pages/ProfileSettings'
 import {PaymentSuccess} from "./pages/PaymentSuccess"
 import {PaymentFailed} from "./pages/PaymentFailed"
 import { getCurrentUser } from '../services/api'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './components/ThemeContext'
@@ -30,7 +30,13 @@ function NormalizeUnknownPath() {
 }
 
 function App() {
+  const { pathname } = useLocation()
   const dispatch = useDispatch()
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   useEffect (()=>{
     getCurrentUser(dispatch)
   },[dispatch])

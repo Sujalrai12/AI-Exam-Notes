@@ -67,7 +67,7 @@ export const HistoryNote = () => {
                 <div className="flex items-start gap-4">
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-blue-50 text-xl text-blue-600 sm:h-13 sm:w-13 sm:rounded-2xl sm:text-2xl" aria-hidden="true">▤</span>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-blue-600">Saved study guide</p>
+                    {/* <p className="text-xs font-bold uppercase tracking-[0.15em] text-white-600">Saved study guide</p> */}
                     <h1 className="mt-1 break-words text-xl font-bold tracking-tight text-[#111a32] sm:text-3xl">{note?.topic || "Study notes"}</h1>
                     {savedDate && <p className="mt-1.5 text-sm text-muted">Saved {savedDate}</p>}
                   </div>

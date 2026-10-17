@@ -2,8 +2,16 @@
 
 @theme {
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
-  --color-paper: #f7f9ff;
+  --color-blue-50: #f1f5ff;
+  --color-blue-100: #dce5ff;
+  --color-blue-200: #bfd0ff;
+  --color-blue-500: #4c70f5;
+  --color-blue-600: #315bff;
+  --color-blue-700: #2449d8;
+  --color-blue-800: #253e9b;
+  --color-study-section: #f1f5ff;
+  --color-study-section-rule: #e3e9f2;
+  --color-paper: #f8f9fc;
   --color-ink: #17213b;
   --color-highlight: #315bff;
   --color-navy: #17213b;
@@ -19,7 +27,7 @@ body,
 
 body {
   margin: 0;
-  background: #f7f9ff;
+  background: #f8f9fc;
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
@@ -41,6 +49,8 @@ html.dark-theme {
   --color-navy: #e8eeff;
   --color-rule: #2a3850;
   --color-muted: #abb8ce;
+  --color-study-section: #101725;
+  --color-study-section-rule: #172235;
   color-scheme: dark;
   background-color: #0b1220;
 }
@@ -120,6 +130,7 @@ html.dark-theme [class~="border-slate-300"],
 html.dark-theme [class~="border-gray-200"],
 html.dark-theme [class~="border-gray-300"],
 html.dark-theme .border-rule { border-color: #2a3850; }
+html.dark-theme .notes-panel { border-color: #34435c; }
 html.dark-theme [class~="ring-blue-100"],
 html.dark-theme [class~="focus:ring-blue-100"] { --tw-ring-color: #2a426c; }
 html.dark-theme [class~="hover:bg-white"]:hover,

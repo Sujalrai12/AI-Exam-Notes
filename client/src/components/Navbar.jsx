@@ -44,7 +44,7 @@ export const Navbar = () => {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-4 sm:px-8 sm:py-3">
         <button type="button" onClick={() => navigate("/")} className="flex shrink-0 items-center gap-2 sm:gap-3">
           <img src={logo} alt="ExamNotes" className="h-8 w-8 rounded-md object-cover ring-1 ring-rule sm:h-10 sm:w-10" />
-          <span className="hidden font-serif text-xl font-semibold tracking-tight text-ink min-[360px]:inline">
+          <span className="hidden font-sans text-xl font-semibold tracking-tight text-ink min-[360px]:inline">
             ExamNotes
           </span>
         </button>
