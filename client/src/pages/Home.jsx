@@ -37,7 +37,7 @@ export default function Home() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen overflow-hidden bg-paper text-ink transition-colors duration-300">
+    <div className="min-h-screen overflow-x-clip bg-paper text-ink transition-colors duration-300">
       <Navbar />
 
       <main>

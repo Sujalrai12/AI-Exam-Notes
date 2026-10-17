@@ -11,7 +11,7 @@ export const Notes = () => {
   const [error, setError] = useState("")
 
   return (
-    <div className="min-h-screen bg-[#f5f8ff] text-ink">
+    <div className="min-h-screen bg-paper text-ink">
       <Navbar />
 
       <main className="mx-auto max-w-6xl px-3 pb-8 pt-4 sm:px-8 sm:pt-10">
