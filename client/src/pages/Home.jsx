@@ -17,7 +17,7 @@ const quickFeatures = [
   },
   {
     title: "Exam questions",
-    description: "Practise short, long, and diagram questions.",
+    description: "Practice short, long, and diagram questions.",
     icon: HiOutlineQuestionMarkCircle,
   },
   {
