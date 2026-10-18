@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import mermaid from "mermaid"
 
 
@@ -12,44 +11,30 @@ const cleanMermaidChart = (diagram) => {
     if (!diagram) return "";
 
     let clean = diagram
-        .replace(/\r?\n/g, "\n")
+        .replace(/```(?:mermaid)?/gi, "")
+        // Some model responses double-escape line breaks inside the JSON string.
+        .replace(/\\r\\n/g, "\n")
+        .replace(/\\n/g, "\n")
+        .replace(/\\r/g, "\n")
+        .replace(/\\t/g, " ")
+        .replace(/\r\n?/g, "\n")
         .trim();
 
-    if (!clean.startsWith("graph")) {
+    if (!/^\s*(?:graph|flowchart)\b/i.test(clean)) {
         clean = `graph TD\n${clean}`;
     }
 
     return clean;
 };
 
-const autoFixBadNodes = (diagram) => {
-  let index = 0;
-  const used = new Map();
-
-  return diagram.replace(/\[(.*?)\]/g, (match, label) => {
-    // normalize label for key
-    const key = label.trim();
-
-    // reuse same node if label already seen
-    if (used.has(key)) {
-      return used.get(key);
-    }
-
-    index++;
-    const id = `N${index}`;
-    const node = `${id}["${key}"]`;
-
-    used.set(key, node);
-    return node;
-  });
-};
-
 
 export const MermaidSetup = ({diagram}) => {
     const containerRef = useRef(null)
+    const [renderError, setRenderError] = useState(false)
 
     useEffect(()=>{
         if(!diagram || !containerRef.current) return ;
+        setRenderError(false)
         
         const renderDiagram = async ()=>{
             try {
@@ -59,14 +44,14 @@ export const MermaidSetup = ({diagram}) => {
                     .substring(2,9)
                 }`
 
-                const safeChart = autoFixBadNodes(cleanMermaidChart(diagram));
+                const safeChart = cleanMermaidChart(diagram);
 
                 const {svg} = await mermaid.render(uniqueId, safeChart);
 
                 containerRef.current.innerHTML = svg;
             } catch (error) {
                 console.error("Mermaid render failed:", error)
-                
+                setRenderError(true)
             }
         }
         renderDiagram();
@@ -74,6 +59,7 @@ export const MermaidSetup = ({diagram}) => {
   return (
     <div className='bg-white border rounded-lg p-4 overflow-x-auto'>
         <div ref={containerRef}/>
+        {renderError && <p role="status" className="mt-2 text-sm text-muted">This diagram could not be displayed. Try generating the notes again.</p>}
     </div>
   )
 }

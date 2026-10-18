@@ -14,6 +14,8 @@ export const History = () => {
   const [error, setError] = useState("")
   const [notice, setNotice] = useState("")
   const [deletingNoteId, setDeletingNoteId] = useState(null)
+  const [selectedNoteIds, setSelectedNoteIds] = useState(() => new Set())
+  const [isDeletingSelected, setIsDeletingSelected] = useState(false)
 
   useEffect(() => {
     let isMounted = true
@@ -44,12 +46,62 @@ export const History = () => {
     try {
       await axios.delete(`${serverUrl}/api/notes/${note._id}`, { withCredentials: true })
       setTopics((currentTopics) => currentTopics.filter((item) => item._id !== note._id))
+      setSelectedNoteIds((currentIds) => {
+        const nextIds = new Set(currentIds)
+        nextIds.delete(note._id)
+        return nextIds
+      })
       setNotice(`“${title}” was deleted.`)
     } catch (requestError) {
       console.error(requestError)
       setError(requestError.response?.data?.error || "We couldn't delete these notes. Please try again.")
     } finally {
       setDeletingNoteId(null)
+    }
+  }
+
+  const allNotesSelected = topics.length > 0 && topics.every((note) => selectedNoteIds.has(note._id))
+
+  const handleToggleAllNotes = () => {
+    setSelectedNoteIds(allNotesSelected ? new Set() : new Set(topics.map((note) => note._id)))
+  }
+
+  const handleToggleNote = (noteId) => {
+    setSelectedNoteIds((currentIds) => {
+      const nextIds = new Set(currentIds)
+      if (nextIds.has(noteId)) nextIds.delete(noteId)
+      else nextIds.add(noteId)
+      return nextIds
+    })
+  }
+
+  const handleDeleteSelected = async () => {
+    const selectedIds = topics.filter((note) => selectedNoteIds.has(note._id)).map((note) => note._id)
+    if (!selectedIds.length) return
+    if (!window.confirm(`Delete ${selectedIds.length} selected ${selectedIds.length === 1 ? "note" : "notes"}? This can't be undone.`)) return
+
+    setIsDeletingSelected(true)
+    setError("")
+    setNotice("")
+    try {
+      const results = await Promise.allSettled(selectedIds.map((noteId) =>
+        axios.delete(`${serverUrl}/api/notes/${noteId}`, { withCredentials: true })
+      ))
+      const deletedIds = selectedIds.filter((_, index) => results[index].status === "fulfilled")
+      const failedIds = selectedIds.filter((_, index) => results[index].status === "rejected")
+
+      setTopics((currentTopics) => currentTopics.filter((note) => !deletedIds.includes(note._id)))
+      setSelectedNoteIds(new Set(failedIds))
+      if (failedIds.length) {
+        setError(`${deletedIds.length} deleted; ${failedIds.length} couldn't be deleted. Try again.`)
+      } else {
+        setNotice(`${deletedIds.length} ${deletedIds.length === 1 ? "note" : "notes"} deleted.`)
+      }
+    } catch (requestError) {
+      console.error(requestError)
+      setError(requestError.response?.data?.error || "We couldn't delete these notes. Please try again.")
+    } finally {
+      setIsDeletingSelected(false)
     }
   }
 
@@ -73,12 +125,36 @@ export const History = () => {
         {notice && <p role="status" className="mb-5 rounded-xl border border-emerald-200 bg-green-50 px-4 py-3 text-sm text-green-400">{notice}</p>}
 
         <section aria-labelledby="history-list-title" className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4 sm:px-6">
             <div>
               <h2 id="history-list-title" className="font-semibold text-ink">Your notes</h2>
               <p className="mt-0.5 text-xs text-muted">{topics.length} {topics.length === 1 ? "saved set" : "saved sets"}</p>
             </div>
-            <HiOutlineDocumentText className="text-blue-600" size={21} aria-hidden="true" />
+            {!isFetching && topics.length > 0 && (
+              <div className="flex items-center gap-3">
+                <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted">
+                  <input
+                    type="checkbox"
+                    checked={allNotesSelected}
+                    onChange={handleToggleAllNotes}
+                    disabled={isDeletingSelected || Boolean(deletingNoteId)}
+                    className="size-4 accent-blue-600"
+                    aria-label={allNotesSelected ? "Deselect all notes" : "Select all notes"}
+                  />
+                  <span>{selectedNoteIds.size ? `${selectedNoteIds.size} selected` : "Select all"}</span>
+                </label>
+                {selectedNoteIds.size > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleDeleteSelected}
+                    disabled={isDeletingSelected || Boolean(deletingNoteId)}
+                    className="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100 disabled:cursor-wait disabled:opacity-60"
+                  >
+                    {isDeletingSelected ? "Deleting…" : "Delete selected"}
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           {isFetching ? (
@@ -97,8 +173,16 @@ export const History = () => {
               {topics.map((note) => (
                 <article
                   key={note._id}
-                  className="group flex min-h-40 items-start gap-2 rounded-lg border border-slate-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-blue-200 hover:bg-white hover:shadow-[0_10px_25px_rgba(28,48,92,0.08)] sm:p-5"
+                  className={`group flex min-h-40 items-start gap-2 rounded-lg border bg-white p-4 transition hover:-translate-y-0.5 hover:border-blue-200 hover:bg-white hover:shadow-[0_10px_25px_rgba(28,48,92,0.08)] sm:p-5 ${selectedNoteIds.has(note._id) ? "border-blue-500 ring-2 ring-blue-100" : "border-slate-200"}`}
                 >
+                  <input
+                    type="checkbox"
+                    checked={selectedNoteIds.has(note._id)}
+                    onChange={() => handleToggleNote(note._id)}
+                    disabled={isDeletingSelected || Boolean(deletingNoteId)}
+                    className="mt-1 size-4 shrink-0 cursor-pointer accent-blue-600"
+                    aria-label={`Select notes for ${note.topic || "untitled topic"}`}
+                  />
                   <button
                     type="button"
                     onClick={() => navigate(`/history/${note._id}`)}
@@ -120,10 +204,9 @@ export const History = () => {
                   <button
                     type="button"
                     onClick={() => handleDeleteNote(note)}
-                    disabled={deletingNoteId === note._id}
+                    disabled={deletingNoteId === note._id || isDeletingSelected}
                     aria-label={`Delete notes for ${note.topic || "untitled topic"}`}
-                    className="shrink-0 rounded-md px-2 py-1.5 text-xs font-medium text-muted transition hover:text -red-600 focus:outline-none focus:ring-4 focus:ring-red-100 disabled:cursor-wait disabled:opacity-60
-                    hover:cursor-pointer"
+                    className="shrink-0 rounded-md px-2 py-1.5 text-xs font-medium text-muted transition hover:text-red-600 focus:outline-none focus:ring-4 focus:ring-red-100 disabled:cursor-wait disabled:opacity-60 hover:cursor-pointer"
                   >
                     {deletingNoteId === note._id ? "Deleting…" : "Delete"}
                   </button>

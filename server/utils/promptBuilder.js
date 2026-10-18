@@ -179,6 +179,7 @@ DIAGRAM RULES:
 - If INCLUDE DIAGRAM is YES:
   - diagram.data MUST be a SINGLE STRING containing valid Mermaid syntax.
   - The diagram MUST start with: graph TD
+  - Separate Mermaid statements with actual line breaks in the string; do not return literal backslash-n text.
   - Wrap EVERY node label in square brackets.
   - Keep labels short and clear.
   - Do NOT use special characters inside labels.

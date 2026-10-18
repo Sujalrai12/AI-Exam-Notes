@@ -75,7 +75,6 @@ export const generateNotes = async (req, res) => {
             error.statusCode = 502
             throw error
         }
-        
 
         const notes = await Notes.create({
             user :user._id,
