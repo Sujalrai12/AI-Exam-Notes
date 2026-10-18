@@ -42,7 +42,7 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-30 border-b border-rule bg-paper/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-4 sm:px-8 sm:py-3">
-        <button type="button" onClick={() => navigate("/")} className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <button type="button" onClick={() => navigate("/")} className="flex shrink-0 items-center gap-2 hover:cursor-pointer sm:gap-3">
           <img src={logo} alt="ExamNotes" className="h-8 w-8 rounded-md object-cover ring-1 ring-rule sm:h-10 sm:w-10" />
           <span className="hidden font-sans text-xl font-semibold tracking-tight text-ink min-[360px]:inline">
             ExamNotes
@@ -135,7 +135,7 @@ export const Navbar = () => {
             </button>
           )}
 
-          <button type="button" className="grid h-8 w-7 shrink-0 place-items-center md:hidden" onClick={() => setOpen((value) => !value)} aria-label="Menu">
+          <button type="button" className="grid h-8 w-7 shrink-0 place-items-center hover:cursor-pointer md:hidden" onClick={() => setOpen((value) => !value)} aria-label="Menu">
             {open ? <HiOutlineX size={20} /> : <HiOutlineMenu size={20} />}
           </button>
         </div>
@@ -144,10 +144,10 @@ export const Navbar = () => {
       {open && (
         <div className="border-t border-rule bg-paper px-5 py-4 md:hidden">
           <div className="flex flex-col gap-3 text-sm font-medium">
-            <button type="button" className="text-left" onClick={() => { setOpen(false); navigate("/") }}>Home</button>
-            <button type="button" className="text-left" onClick={() => goProtected("/notes")}>Generate</button>
-            <button type="button" className="text-left" onClick={() => goProtected("/history")}>History</button>
-            <button type="button" className="text-left" onClick={() => goProtected("/pricing")}>Credits</button>
+            <button type="button" className="text-left hover:cursor-pointer" onClick={() => { setOpen(false); navigate("/") }}>Home</button>
+            <button type="button" className="text-left hover:cursor-pointer" onClick={() => goProtected("/notes")}>Generate</button>
+            <button type="button" className="text-left hover:cursor-pointer" onClick={() => goProtected("/history")}>History</button>
+            <button type="button" className="text-left hover:cursor-pointer" onClick={() => goProtected("/pricing")}>Credits</button>
           </div>
         </div>
       )}

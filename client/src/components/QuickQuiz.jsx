@@ -78,7 +78,7 @@ export function QuickQuiz({ questions }) {
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
         {submitted ? (
-          <button type="button" onClick={handleRetry} className="quick-quiz-submit rounded-xl px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4">
+          <button type="button" onClick={handleRetry} className="quick-quiz-submit rounded-xl px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4 hover:cursor-pointer">
             Try again
           </button>
         ) : (
@@ -86,7 +86,7 @@ export function QuickQuiz({ questions }) {
             type="button"
             onClick={() => setSubmitted(true)}
             disabled={Object.keys(answers).length < questions.length}
-            className="quick-quiz-submit rounded-xl px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed"
+            className="quick-quiz-submit rounded-xl px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4 hover:cursor-pointer disabled:cursor-not-allowed"
           >
             Check answers
           </button>

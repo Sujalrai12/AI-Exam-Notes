@@ -58,7 +58,7 @@ export const HistoryNote = () => {
         ) : error ? (
           <div className="rounded-2xl border border-red-200 bg-white p-5 text-center shadow-[0_10px_28px_rgba(28,48,92,0.06)] sm:p-8">
             <p role="alert" className="text-sm text-red-800">{error}</p>
-            <button type="button" onClick={() => navigate("/history")} className="mt-4 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">Return to history</button>
+            <button type="button" onClick={() => navigate("/history")} className="mt-4 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 hover:cursor-pointer">Return to history</button>
           </div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>

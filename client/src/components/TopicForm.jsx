@@ -139,7 +139,7 @@ export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
         whileHover={!loading ? { y: -1 } : {}}
         whileTap={!loading ? { scale: 0.995 } : {}}
         disabled={loading || !topic.trim()}
-        className="flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(49,91,255,0.18)] transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+        className="flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(49,91,255,0.18)] transition hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
       >
         <span aria-hidden="true"></span>{loading ? "Generating notes..." : "Generate notes"}<span aria-hidden="true">→</span>
       </motion.button>
@@ -160,7 +160,7 @@ export const TopicForm = ({ setResult, setLoading, loading, setError }) => {
 function Toggle({ label, description, checked, onChange }) {
   return (
     <div className="flex items-center gap-3">
-      <button type="button" role="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)} className={`relative h-7 w-12 shrink-0 rounded-full transition-colors focus:outline-none focus:ring-4 focus:ring-blue-100 ${checked ? "bg-blue-600" : "bg-slate-300"}`}>
+      <button type="button" role="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)} className={`relative h-7 w-12 shrink-0 rounded-full transition-colors focus:outline-none focus:ring-4 focus:ring-blue-100 hover:cursor-pointer ${checked ? "bg-blue-600" : "bg-slate-300"}`}>
         <span aria-hidden="true" className={`absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${checked ? "translate-x-5" : "translate-x-0"}`} />
       </button>
       <span><span className="block text-sm font-semibold text-ink">{label}</span><span className="mt-0.5 block text-xs text-muted">{description}</span></span>

@@ -111,10 +111,10 @@ export const FinalResult = ({ result, compact = false }) => {
           <h2 className="mt-1 text-2xl font-bold tracking-tight text-ink">Generated notes</h2>
         </div>}
         <div className={`flex flex-wrap gap-2 ${compact ? "sm:ml-auto" : ""}`}>
-          <button type="button" onClick={() => setQuickRevision((value) => !value)} aria-pressed={quickRevision} className={`rounded-lg border px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-4 focus:ring-blue-100 sm:px-3.5 sm:py-2.5 sm:text-sm ${quickRevision ? "border-blue-600 bg-blue-600 text-white" : "border-slate-200 bg-white text-ink hover:border-blue-200 hover:bg-blue-50 hover:cursor-pointer"}`}>
+          <button type="button" onClick={() => setQuickRevision((value) => !value)} aria-pressed={quickRevision} className={`rounded-lg border px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-4 focus:ring-blue-100 hover:cursor-pointer sm:px-3.5 sm:py-2.5 sm:text-sm ${quickRevision ? "border-blue-600 bg-blue-600 text-white" : "border-slate-200 bg-white text-ink hover:border-blue-200 hover:bg-blue-50"}`}>
             {quickRevision ? "Show full notes" : "Quick revision"}
           </button>
-          <button type="button" onClick={handleQuickQuiz} disabled={quizLoading} aria-expanded={quizOpen} className="quick-quiz-action rounded-lg border px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-4 disabled:cursor-wait disabled:opacity-60 sm:px-3.5 sm:py-2.5 sm:text-sm">
+          <button type="button" onClick={handleQuickQuiz} disabled={quizLoading} aria-expanded={quizOpen} className="quick-quiz-action rounded-lg border px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-4 hover:cursor-pointer disabled:cursor-wait disabled:opacity-60 sm:px-3.5 sm:py-2.5 sm:text-sm">
             {quizLoading ? "Preparing quiz..." : quizOpen ? "Hide quiz" : quizQuestions.length > 0 ? "Take quick quiz" : "Generate quick quiz"}
           </button>
           <button type="button" onClick={handleDownloadPdf} className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 hover:cursor-pointer sm:px-3.5 sm:py-2.5 sm:text-sm">

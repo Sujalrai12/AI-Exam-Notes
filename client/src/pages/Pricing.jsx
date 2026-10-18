@@ -147,7 +147,7 @@ return (
     <button type="button" disabled={isPayingThisCard} onClick={(e)=>{
       e.stopPropagation()
       onBuy(amount)
-    }} className={`mt-5 min-h-11 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4 focus:ring-blue-200 ${isPayingThisCard ? "cursor-not-allowed bg-slate-300 text-white" : "bg-blue-600 text-white hover:bg-blue-700"}`}>
+    }} className={`mt-5 min-h-11 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4 focus:ring-blue-200 ${isPayingThisCard ? "cursor-not-allowed bg-slate-300 text-white" : "bg-blue-600 text-white hover:bg-blue-700 hover:cursor-pointer"}`}>
         {isPayingThisCard ? "Redirecting..." :"Buy Now"}
 
       </button>

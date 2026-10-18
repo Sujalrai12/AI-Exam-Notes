@@ -37,9 +37,9 @@ export const Footer = () => {
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Quick links</h2>
           <ul className="mt-4 space-y-2 text-sm">
-            <li><button type="button" onClick={() => navigate("/notes")}>Generate notes</button></li>
-            <li><button type="button" onClick={() => navigate("/history")}>History</button></li>
-            <li><button type="button" onClick={() => navigate("/pricing")}>Buy credits</button></li>
+            <li><button type="button" onClick={() => navigate("/notes")} className="hover:cursor-pointer">Generate notes</button></li>
+            <li><button type="button" onClick={() => navigate("/history")} className="hover:cursor-pointer">History</button></li>
+            <li><button type="button" onClick={() => navigate("/pricing")} className="hover:cursor-pointer">Buy credits</button></li>
           </ul>
         </div>
 
@@ -48,11 +48,11 @@ export const Footer = () => {
           <ul className="mt-4 space-y-2 text-sm">
             {userData ? (
               <li>
-                <button type="button" onClick={handleSignOut} className="text-red-700">Sign out</button>
+                <button type="button" onClick={handleSignOut} className="text-red-700 hover:cursor-pointer">Sign out</button>
               </li>
             ) : (
               <li>
-                <button type="button" onClick={() => navigate("/login")}>Log in</button>
+                <button type="button" onClick={() => navigate("/login")} className="hover:cursor-pointer">Log in</button>
               </li>
             )}
             <li>

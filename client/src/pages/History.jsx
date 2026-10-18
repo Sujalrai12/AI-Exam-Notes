@@ -116,7 +116,7 @@ export const History = () => {
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">Study history</h1>
             <p className="mt-2 text-sm leading-6 text-muted">Pick up where you left off and revisit your generated notes.</p>
           </div>
-          <button type="button" onClick={() => navigate("/notes")} className="inline-flex min-h-11 items-center justify-center self-start rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 sm:self-auto">
+          <button type="button" onClick={() => navigate("/notes")} className="inline-flex min-h-11 items-center justify-center self-start rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200 sm:self-auto">
             Create notes
           </button>
         </motion.div>
@@ -148,7 +148,7 @@ export const History = () => {
                     type="button"
                     onClick={handleDeleteSelected}
                     disabled={isDeletingSelected || Boolean(deletingNoteId)}
-                    className="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100 disabled:cursor-wait disabled:opacity-60"
+                    className="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-red-100 disabled:cursor-wait disabled:opacity-60"
                   >
                     {isDeletingSelected ? "Deleting…" : "Delete selected"}
                   </button>
@@ -166,7 +166,7 @@ export const History = () => {
               <HiOutlineDocumentText className="mx-auto text-blue-600" size={28} aria-hidden="true" />
               <h2 className="mt-4 text-lg font-semibold text-ink">No saved notes yet</h2>
               <p className="mx-auto mt-1 max-w-sm text-sm leading-6 text-muted">Create a set of notes and it will appear here, ready for your next revision session.</p>
-              <button type="button" onClick={() => navigate("/notes")} className="mt-5 min-h-11 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">Generate notes</button>
+              <button type="button" onClick={() => navigate("/notes")} className="mt-5 min-h-11 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200">Generate notes</button>
             </div>
           ) : (
             <div className="grid gap-3 p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-3">

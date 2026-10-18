@@ -126,14 +126,14 @@ const Auth = () => {
             <button
               type="button"
               onClick={() => { setMode("login"); setError(""); setNotice("") }}
-              className={`rounded-lg px-2 py-2.5 transition sm:px-4 ${!isRegistering ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
+              className={`rounded-lg px-2 py-2.5 transition hover:cursor-pointer sm:px-4 ${!isRegistering ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
             >
               Log in
             </button>
             <button
               type="button"
               onClick={() => { setMode("register"); setError(""); setNotice("") }}
-              className={`rounded-lg px-2 py-2.5 transition sm:px-4 ${isRegistering ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
+              className={`rounded-lg px-2 py-2.5 transition hover:cursor-pointer sm:px-4 ${isRegistering ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
             >
               Register
             </button>
@@ -186,7 +186,7 @@ const Auth = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full rounded-xl bg-slate-600 px-4 py-2.5 font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-slate-600 px-4 py-2.5 font-semibold text-white transition hover:bg-slate-800 hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? "Please wait…" : isRegistering ? "Create account" : "Log in"}
             </button>
@@ -202,7 +202,7 @@ const Auth = () => {
             type="button"
             onClick={handleGoogleAuth}
             disabled={isLoading}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 px-4 py-2.5 font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 px-4 py-2.5 font-semibold text-slate-700 transition hover:bg-slate-50 hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
           >
             <FcGoogle size={21} />
             Continue with Google

@@ -50,7 +50,7 @@ export default function Home() {
               Add the topic, class, and exam type. Get a clear explanation, practice questions, and last-minute revision points, with diagrams when you need them.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <button type="button" onClick={() => navigate("/login")} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+              <button type="button" onClick={() => navigate("/login")} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200">
                 Generate notes
               </button>
               <a href="#how-it-works" className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-blue-200 hover:bg-blue-50">
@@ -119,7 +119,7 @@ export default function Home() {
             <ol className="mt-10 divide-y divide-slate-200 border-y border-slate-200 md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
               {productFeatures.map((feature, index) => <li key={feature.title} className="py-5 md:px-5 md:py-6 first:md:pl-0 last:md:pr-0"><p className="text-xs font-medium text-muted">0{index + 1}</p><h3 className="mt-2 text-lg font-semibold text-ink">{feature.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{feature.description}</p></li>)}
             </ol>
-            <div className="mt-8 text-center"><button type="button" onClick={() => navigate("/notes")} className="min-h-11 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">Create notes</button></div>
+            <div className="mt-8 text-center"><button type="button" onClick={() => navigate("/notes")} className="min-h-11 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200">Create notes</button></div>
           </div>
         </section>
 

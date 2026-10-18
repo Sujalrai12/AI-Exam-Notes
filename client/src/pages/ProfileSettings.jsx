@@ -79,7 +79,7 @@ const ProfileSettings = () => {
 
       <main className="mx-auto max-w-3xl px-3 pb-8 pt-5 sm:px-8 sm:pt-10">
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-          <button type="button" onClick={() => navigate(-1)} className="mb-4 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-blue-100">
+          <button type="button" onClick={() => navigate(-1)} className="mb-4 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-100">
             <span aria-hidden="true">←</span> Back
           </button>
 
@@ -126,7 +126,7 @@ const ProfileSettings = () => {
                 />
                 <span id="email-help" className="mt-1.5 block text-xs leading-5 text-muted">This is the email used to sign in and cannot be changed here.</span>
               </label>
-              <button type="submit" disabled={profileBusy || !name.trim() || name.trim() === userData?.name} className="min-h-11 w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-40">
+              <button type="submit" disabled={profileBusy || !name.trim() || name.trim() === userData?.name} className="min-h-11 w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-40">
                 {profileBusy ? "Saving…" : "Save changes"}
               </button>
             </form>
@@ -138,7 +138,7 @@ const ProfileSettings = () => {
                 <h2 id="security-title" className="text-lg font-semibold text-ink">Security</h2>
                 <p className="mt-1 text-sm text-muted">{userData?.hasPassword ? "Password sign-in is enabled for your account." : "Add a password to also sign in with your email."}</p>
               </div>
-              <button type="button" onClick={() => { setPasswordOpen((isOpen) => !isOpen); setError(""); setNotice("") }} className="min-h-10 w-full rounded-xl border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-blue-100 sm:w-auto">
+              <button type="button" onClick={() => { setPasswordOpen((isOpen) => !isOpen); setError(""); setNotice("") }} className="min-h-10 w-full rounded-xl border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-100 sm:w-auto">
                 {passwordOpen ? "Cancel" : userData?.hasPassword ? "Change password" : "Set a password"}
               </button>
             </div>
@@ -151,7 +151,7 @@ const ProfileSettings = () => {
                 <PasswordField label="New password" value={newPassword} onChange={setNewPassword} autoComplete="new-password" />
                 <PasswordField label="Confirm new password" value={confirmPassword} onChange={setConfirmPassword} autoComplete="new-password" />
                 <p className="text-xs text-muted">Use at least 8 characters. Passwords are stored securely.</p>
-                <button type="submit" disabled={passwordBusy || !newPassword || !confirmPassword || (userData?.hasPassword && !currentPassword)} className="min-h-11 w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-40">
+                <button type="submit" disabled={passwordBusy || !newPassword || !confirmPassword || (userData?.hasPassword && !currentPassword)} className="min-h-11 w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-40">
                   {passwordBusy ? "Updating…" : userData?.hasPassword ? "Update password" : "Set password"}
                 </button>
               </form>
