@@ -4,7 +4,10 @@ import mermaid from "mermaid"
 
 mermaid.initialize({
     startOnLoad:false,
-    theme:"default"
+    theme:"default",
+    // Mermaid's default parse-error renderer injects a large error diagram into
+    // the document. Keep failures inside this component instead.
+    suppressErrorRendering:true
 })
 
 const cleanMermaidChart = (diagram) => {
@@ -12,11 +15,10 @@ const cleanMermaidChart = (diagram) => {
 
     let clean = diagram
         .replace(/```(?:mermaid)?/gi, "")
-        // Some model responses double-escape line breaks inside the JSON string.
-        .replace(/\\r\\n/g, "\n")
-        .replace(/\\n/g, "\n")
-        .replace(/\\r/g, "\n")
-        .replace(/\\t/g, " ")
+        // Model responses can contain one or several levels of JSON escaping.
+        .replace(/\\+r\\+n/gi, "\n")
+        .replace(/\\+[nr]/gi, "\n")
+        .replace(/\\+t/gi, " ")
         .replace(/\r\n?/g, "\n")
         .trim();
 
